@@ -73,7 +73,7 @@ cd ReDantotsu
 ## 🏛️ Credits
 
 ### Original Project
-- **[Dantotsu](https://github.com/rebelonion/Dantotsu)** by [rebelonion](https://github.com/rebelonion)
+- **[Dantotsu](https://git.rebelonion.dev/rebelonion/Dantotsu)** by [rebelonion](https://github.com/rebelonion)
 - Built from the ashes of Saikou
 
 ### ReDantotsu
