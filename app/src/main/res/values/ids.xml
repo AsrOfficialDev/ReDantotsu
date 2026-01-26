@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Fragment container IDs for Compose navigation -->
+    <item name="anime_fragment_container" type="id" />
+    <item name="home_fragment_container" type="id" />
+    <item name="manga_fragment_container" type="id" />
+    
+    <!-- Offline fragment container IDs -->
+    <item name="offline_anime_fragment_container" type="id" />
+    <item name="offline_home_fragment_container" type="id" />
+    <item name="offline_manga_fragment_container" type="id" />
+</resources>

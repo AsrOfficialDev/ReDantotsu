@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Liquid Glass Bottom Navigation Background - Pill Shape with Glass Effect -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <!-- Semi-transparent background for glass effect -->
+    <solid android:color="#E6F5F5F7" />
+    <!-- Full pill shape with large corner radius -->
+    <corners android:radius="40dp" />
+    <!-- Subtle stroke for glass edge -->
+    <stroke
+        android:width="0.5dp"
+        android:color="#33FFFFFF" />
+</shape>

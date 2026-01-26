@@ -140,6 +140,10 @@
             android:name=".settings.SettingsActivity"
             android:parentActivityName=".MainActivity" />
         <activity
+            android:name=".settings.LiquidGlassSettingsActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:excludeFromRecents="true" />
+        <activity
             android:name=".settings.SettingsAboutActivity"
             android:parentActivityName=".MainActivity" />
         <activity
@@ -396,6 +400,13 @@
                 <data android:scheme="tachiyomi"/>
                 <data android:scheme="aniyomi"/>
                 <data android:scheme="novelyomi"/>
+            </intent-filter>
+            <intent-filter android:label="Dantotsu Payment Success">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="redantotsu" />
+                <data android:host="payment-success" />
             </intent-filter>
         </activity>
         <activity

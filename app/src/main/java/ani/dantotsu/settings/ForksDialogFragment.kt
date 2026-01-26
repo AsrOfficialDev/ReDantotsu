@@ -6,11 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.BottomSheetDialogFragment
-import ani.dantotsu.R
-import ani.dantotsu.databinding.BottomSheetDevelopersBinding
+import ani.dantotsu.databinding.BottomSheetForksBinding
 
 class ForksDialogFragment : BottomSheetDialogFragment() {
-    private var _binding: BottomSheetDevelopersBinding? = null
+    private var _binding: BottomSheetForksBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -18,24 +17,26 @@ class ForksDialogFragment : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = BottomSheetDevelopersBinding.inflate(inflater, container, false)
+        _binding = BottomSheetForksBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.devsTitle.setText(R.string.forks)
-        binding.devsRecyclerView.adapter = DevelopersAdapter(
-            arrayOf(
+        
+        val items = listOf(
+            DeveloperItem.Dev(
                 Developer(
                     "Awery",
                     "https://avatars.githubusercontent.com/u/92123190?v=4",
                     "MrBoomDeveloper",
                     "https://github.com/MrBoomDeveloper/Awery"
-                ),
+                )
             )
         )
-        binding.devsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        
+        binding.forksRecyclerView.adapter = DevelopersAdapter(items)
+        binding.forksRecyclerView.layoutManager = LinearLayoutManager(requireContext())
     }
 
     override fun onDestroy() {

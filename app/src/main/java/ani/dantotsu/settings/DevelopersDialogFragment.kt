@@ -4,10 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.BottomSheetDialogFragment
+import ani.dantotsu.R
 import ani.dantotsu.connections.github.Contributors
 import ani.dantotsu.databinding.BottomSheetDevelopersBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class DevelopersDialogFragment : BottomSheetDialogFragment() {
     private var _binding: BottomSheetDevelopersBinding? = null
@@ -24,8 +29,31 @@ class DevelopersDialogFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.devsRecyclerView.adapter = DevelopersAdapter(Contributors().getContributors())
+        
         binding.devsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        
+        viewLifecycleOwner.lifecycleScope.launch {
+            val sections = withContext(Dispatchers.IO) {
+                Contributors().getContributorSections()
+            }
+            
+            // Build the items list with sections
+            val items = mutableListOf<DeveloperItem>()
+            
+            // Add ReDantotsu section
+            items.add(DeveloperItem.Section(getString(R.string.redantotsu_section)))
+            sections.redantotsuDevs.forEach {
+                items.add(DeveloperItem.Dev(it))
+            }
+            
+            // Add Dantotsu section
+            items.add(DeveloperItem.Section(getString(R.string.dantotsu_section)))
+            sections.dantotsuDevs.forEach {
+                items.add(DeveloperItem.Dev(it))
+            }
+            
+            binding.devsRecyclerView.adapter = DevelopersAdapter(items)
+        }
     }
 
     override fun onDestroy() {

@@ -52,6 +52,7 @@ class ThemeManager(private val context: Activity) {
             "LAVENDER" -> if (useOLED) R.style.Theme_Dantotsu_LavenderOLED else R.style.Theme_Dantotsu_Lavender
             "OCEAN" -> if (useOLED) R.style.Theme_Dantotsu_OceanOLED else R.style.Theme_Dantotsu_Ocean
             "MONOCHROME (BETA)" -> if (useOLED) R.style.Theme_Dantotsu_MonochromeOLED else R.style.Theme_Dantotsu_Monochrome
+            "LIQUID_GLASS" -> if (useOLED) R.style.Theme_Dantotsu_LiquidGlassOLED else R.style.Theme_Dantotsu_LiquidGlass
             else -> if (useOLED) R.style.Theme_Dantotsu_PurpleOLED else R.style.Theme_Dantotsu_Purple
         }
 
@@ -139,7 +140,8 @@ class ThemeManager(private val context: Activity) {
             RED("RED"),
             LAVENDER("LAVENDER"),
             OCEAN("OCEAN"),
-            MONOCHROME("MONOCHROME (BETA)");
+            MONOCHROME("MONOCHROME (BETA)"),
+            LIQUID_GLASS("LIQUID_GLASS");
 
             companion object {
                 fun fromString(value: String): Theme {

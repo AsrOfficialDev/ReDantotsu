@@ -215,6 +215,7 @@ enum class PrefName(val data: Pref) {
     OC(Pref(Location.Irrelevant, Boolean::class, false)),
     RefreshStatus(Pref(Location.Irrelevant, Boolean::class, false)),
     rpcEnabled(Pref(Location.Irrelevant, Boolean::class, true)),
+    IsSupporter(Pref(Location.Irrelevant, Boolean::class, false)),
 
     //Protected
     DiscordToken(Pref(Location.Protected, String::class, "")),

@@ -87,7 +87,12 @@ data class Media(
     var streamingEpisodes: List<MediaStreamingEpisode>? = null,
     var idKitsu: String? = null,
 
-    var cameFromContinue: Boolean = false
+    var cameFromContinue: Boolean = false,
+    
+    // MAL rating from Jikan API
+    var malScore: Float? = null,
+    // Airing timestamp for calendar countdown (epoch seconds)
+    var airingAtTimestamp: Long? = null
 ) : Serializable {
 
     constructor(apiMedia: ApiMedia) : this(

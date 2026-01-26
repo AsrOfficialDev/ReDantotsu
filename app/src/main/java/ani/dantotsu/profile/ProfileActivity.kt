@@ -43,7 +43,7 @@ import com.google.android.material.appbar.AppBarLayout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import nl.joery.animatedbottombar.AnimatedBottomBar
+import ani.dantotsu.widgets.LiquidGlassBottomBar
 import kotlin.math.abs
 
 
@@ -51,7 +51,7 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
     lateinit var binding: ActivityProfileBinding
     private lateinit var bindingProfileAppBar: ItemProfileAppBarBinding
     private var selected: Int = 0
-    lateinit var navBar: AnimatedBottomBar
+    lateinit var navBar: LiquidGlassBottomBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,12 +104,12 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                 binding.profileViewPager.setCurrentItem(selected, false)
                 navBar.visibility = View.VISIBLE
                 navBar.selectTabAt(selected)
-                navBar.setOnTabSelectListener(object : AnimatedBottomBar.OnTabSelectListener {
+                navBar.setOnTabSelectListener(object : LiquidGlassBottomBar.OnTabSelectListener {
                     override fun onTabSelected(
                         lastIndex: Int,
-                        lastTab: AnimatedBottomBar.Tab?,
+                        lastTab: LiquidGlassBottomBar.Tab?,
                         newIndex: Int,
-                        newTab: AnimatedBottomBar.Tab
+                        newTab: LiquidGlassBottomBar.Tab
                     ) {
                         selected = newIndex
                         binding.profileViewPager.setCurrentItem(selected, true)
@@ -345,3 +345,5 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
         }
     }
 }
+
+

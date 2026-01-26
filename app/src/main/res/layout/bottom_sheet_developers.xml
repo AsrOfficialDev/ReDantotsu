@@ -26,13 +26,12 @@
         android:textSize="20sp"
         android:textStyle="bold" />
 
-    <ani.dantotsu.FadingEdgeRecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/devsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clipToPadding="false"
         android:padding="16dp"
-        android:requiresFadingEdge="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:itemCount="10"
         tools:listitem="@layout/item_developer"

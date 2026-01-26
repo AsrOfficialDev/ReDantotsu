@@ -140,7 +140,7 @@ import jp.wasabeef.glide.transformations.BlurTransformation
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import nl.joery.animatedbottombar.AnimatedBottomBar
+import ani.dantotsu.widgets.LiquidGlassBottomBar
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
@@ -166,7 +166,7 @@ var navBarHeight = 0
 val Int.dp: Float get() = (this / getSystem().displayMetrics.density)
 val Float.px: Int get() = (this * getSystem().displayMetrics.density).toInt()
 
-lateinit var bottomBar: AnimatedBottomBar
+var bottomBar: LiquidGlassBottomBar? = null
 var selectedOption = 1
 
 object Refresh {
@@ -284,10 +284,10 @@ fun Activity.setNavigationTheme() {
  *
  * When nesting multiple scrolling views, only call this method on the inner most scrolling view.
  */
-fun ViewGroup.setBaseline(navBar: AnimatedBottomBar) {
-    navBar.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
+fun ViewGroup.setBaseline(navBar: LiquidGlassBottomBar?) {
+    navBar?.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
     clipToPadding = false
-    setPadding(paddingLeft, paddingTop, paddingRight, navBarHeight + navBar.measuredHeight)
+    setPadding(paddingLeft, paddingTop, paddingRight, navBarHeight + (navBar?.measuredHeight ?: 0))
 }
 
 /**
@@ -295,15 +295,15 @@ fun ViewGroup.setBaseline(navBar: AnimatedBottomBar) {
  *
  * When nesting multiple scrolling views, only call this method on the inner most scrolling view.
  */
-fun ViewGroup.setBaseline(navBar: AnimatedBottomBar, overlayView: View) {
-    navBar.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
+fun ViewGroup.setBaseline(navBar: LiquidGlassBottomBar?, overlayView: View) {
+    navBar?.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
     overlayView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
     clipToPadding = false
     setPadding(
         paddingLeft,
         paddingTop,
         paddingRight,
-        navBarHeight + navBar.measuredHeight + overlayView.measuredHeight
+        navBarHeight + (navBar?.measuredHeight ?: 0) + overlayView.measuredHeight
     )
 }
 

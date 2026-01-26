@@ -194,7 +194,7 @@ class SettingsActivity : AppCompatActivity() {
                 lifecycleScope.launch {
                     it.pop()
                 }
-                openLinkInBrowser(getString(R.string.coffee))
+                DonateBottomSheet.newInstance().show(supportFragmentManager, "donate")
             }
             lifecycleScope.launch {
                 settingBuyMeCoffee.pop()
@@ -211,12 +211,24 @@ class SettingsActivity : AppCompatActivity() {
             }
 
 
-            (settingsLogo.drawable as Animatable).start()
+            var splashJob: kotlinx.coroutines.Job? = null
+            fun playSplashAnimation() {
+                splashJob?.cancel()
+                (settingsLogo.drawable as? Animatable)?.start()
+                splashJob = lifecycleScope.launch(Dispatchers.IO) {
+                    delay(2000)
+                    runOnUiThread {
+                        (settingsLogo.drawable as? Animatable)?.stop()
+                    }
+                }
+            }
+
+            playSplashAnimation()
             val array = resources.getStringArray(R.array.tips)
 
             settingsLogo.setSafeOnClickListener {
                 cursedCounter++
-                (settingsLogo.drawable as Animatable).start()
+                playSplashAnimation()
                 if (cursedCounter % 16 == 0) {
                     val oldVal: Boolean = PrefManager.getVal(PrefName.OC)
                     if (!oldVal) {

@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "1039200814590",
-    "project_id": "dantotsu-1e50f",
-    "storage_bucket": "dantotsu-1e50f.appspot.com"
+    "project_number": "326219384951",
+    "project_id": "anisenpai-15c88",
+    "storage_bucket": "anisenpai-15c88.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1039200814590:android:c372b8c1b92b825f1aacaf",
+        "mobilesdk_app_id": "1:326219384951:android:c89699985a38d557521e72",
         "android_client_info": {
-          "package_name": "ani.Dantotsu"
+          "package_name": "ani.asranime.beta"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCiXo_q4S2ofA5oCztsoLnlDqJi3GtTJjY"
+          "current_key": "AIzaSyA0KUPK0NkxOQPgTpOtOQHfL0Z2xjQjmRw"
         }
       ],
       "services": {
@@ -26,53 +26,15 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1039200814590:android:40e14720ee97917e1aacaf",
+        "mobilesdk_app_id": "1:326219384951:android:b5123b674d5ec888521e72",
         "android_client_info": {
-          "package_name": "ani.dantotsu.beta"
+          "package_name": "app.redantotsu.asr"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCiXo_q4S2ofA5oCztsoLnlDqJi3GtTJjY"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:1039200814590:android:40e14720ee97917e1aacaf",
-        "android_client_info": {
-          "package_name": "ani.dantotsu.alpha"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCiXo_q4S2ofA5oCztsoLnlDqJi3GtTJjY"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:1039200814590:android:40e14720ee97917e1aacaf",
-        "android_client_info": {
-          "package_name": "ani.dantotsu"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyCiXo_q4S2ofA5oCztsoLnlDqJi3GtTJjY"
+          "current_key": "AIzaSyA0KUPK0NkxOQPgTpOtOQHfL0Z2xjQjmRw"
         }
       ],
       "services": {

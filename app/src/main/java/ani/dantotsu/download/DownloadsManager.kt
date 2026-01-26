@@ -266,7 +266,7 @@ class DownloadsManager(private val context: Context) {
     }
 
     companion object {
-        private const val BASE_LOCATION = "Dantotsu"
+        private const val BASE_LOCATION = "ReDantotsu"
         private const val MANGA_SUB_LOCATION = "Manga"
         private const val ANIME_SUB_LOCATION = "Anime"
         private const val NOVEL_SUB_LOCATION = "Novel"

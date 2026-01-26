@@ -241,7 +241,7 @@ class AnimeFragment : Fragment() {
                     }
                 }
                 binding.animePageScrollTop.translationY =
-                    -(navBarHeight + bottomBar.height + bottomBar.marginBottom).toFloat()
+                    -(navBarHeight + (bottomBar?.height ?: 0) + (bottomBar?.marginBottom ?: 0)).toFloat()
             }
         }
 

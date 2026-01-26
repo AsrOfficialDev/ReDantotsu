@@ -14,6 +14,8 @@ import android.os.Looper
 import android.provider.Settings
 import android.view.View
 import android.view.ViewGroup
+import eightbitlab.com.blurview.BlurView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import android.view.animation.AnticipateInterpolator
 import android.widget.TextView
 import androidx.activity.addCallback
@@ -73,11 +75,42 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import nl.joery.animatedbottombar.AnimatedBottomBar
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import ani.dantotsu.widgets.LiquidBottomTabs
+import ani.dantotsu.widgets.LiquidBottomTab
+import ani.dantotsu.widgets.GlassSettingsOverlay
+import ani.dantotsu.widgets.GlassSettingsController
+import com.kyant.backdrop.Backdrop
+import com.kyant.backdrop.backdrops.rememberLayerBackdrop
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import ani.dantotsu.home.AnimePageComposable
+import ani.dantotsu.home.HomePageComposable
+import ani.dantotsu.home.MangaPageComposable
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch as coroutineLaunch
 import tachiyomi.core.util.lang.launchIO
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import androidx.compose.foundation.layout.Box
+import androidx.compose.ui.Alignment
+import com.kyant.backdrop.backdrops.layerBackdrop
 import java.io.Serializable
+
 
 
 class MainActivity : AppCompatActivity() {
@@ -121,16 +154,7 @@ class MainActivity : AppCompatActivity() {
             handleViewIntent(intent)
         }
 
-        val bottomNavBar = findViewById<AnimatedBottomBar>(R.id.navbar)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-
-            val backgroundDrawable = bottomNavBar.background as GradientDrawable
-            val currentColor = backgroundDrawable.color?.defaultColor ?: 0
-            val semiTransparentColor = (currentColor and 0x00FFFFFF) or 0xF9000000.toInt()
-            backgroundDrawable.setColor(semiTransparentColor)
-            bottomNavBar.background = backgroundDrawable
-        }
-        bottomNavBar.background = ContextCompat.getDrawable(this, R.drawable.bottom_nav_gray)
+        // LiquidGlassBottomBar handles its own glass background drawing
 
         val offset = try {
             val statusBarHeightId = resources.getIdentifier("status_bar_height", "dimen", "android")
@@ -254,35 +278,161 @@ class MainActivity : AppCompatActivity() {
             } else {
                 PrefManager.getVal(PrefName.DefaultStartUpTab)
             }
-            val navbar = binding.includedNavbar.navbar
-            bottomBar = navbar
-            navbar.visibility = View.VISIBLE
             binding.mainProgressBar.visibility = View.GONE
-            val mainViewPager = binding.viewpager
-            mainViewPager.isUserInputEnabled = false
-            mainViewPager.adapter =
-                ViewPagerAdapter(supportFragmentManager, lifecycle)
-            mainViewPager.setPageTransformer(ZoomOutPageTransformer())
-            navbar.selectTabAt(selectedOption)
-            navbar.setOnTabSelectListener(object :
-                AnimatedBottomBar.OnTabSelectListener {
-                override fun onTabSelected(
-                    lastIndex: Int,
-                    lastTab: AnimatedBottomBar.Tab?,
-                    newIndex: Int,
-                    newTab: AnimatedBottomBar.Tab
-                ) {
-                    navbar.animate().translationZ(12f).setDuration(200).start()
-                    selectedOption = newIndex
-                    mainViewPager.setCurrentItem(newIndex, false)
-                }
-            })
-            if (mainViewPager.currentItem != selectedOption) {
-                mainViewPager.post {
-                    mainViewPager.setCurrentItem(
-                        selectedOption,
-                        false
+            
+            // Check if Liquid Glass theme is active
+            val isLiquidGlassTheme = PrefManager.getVal<String>(PrefName.Theme) == "LIQUID_GLASS"
+            
+            if (isLiquidGlassTheme) {
+                // Use Compose HorizontalPager for Liquid Glass theme
+                binding.viewpager.visibility = View.GONE
+                binding.includedNavbar.root.visibility = View.GONE // Hide XML navbar
+                binding.composeMainContent.visibility = View.VISIBLE
+                
+                binding.composeMainContent.setContent {
+                    val pagerState = rememberPagerState(
+                        initialPage = selectedOption,
+                        pageCount = { 3 }
                     )
+                    val coroutineScope = rememberCoroutineScope()
+                    val backdrop = rememberLayerBackdrop() // Shared backdrop for glass effect
+
+                    // Sync pager state to global selectedOption when page changes
+                    LaunchedEffect(pagerState.currentPage) {
+                        if (selectedOption != pagerState.currentPage) {
+                            selectedOption = pagerState.currentPage
+                        }
+                    }
+                    
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        // Main content pager captured by backdrop
+                        HorizontalPager(
+                            state = pagerState,
+                            userScrollEnabled = false,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .layerBackdrop(backdrop) // Capture content for glass effect
+                        ) { page ->
+                            when (page) {
+                                0 -> AnimePageComposable(supportFragmentManager)
+                                1 -> HomePageComposable(supportFragmentManager)
+                                2 -> MangaPageComposable(supportFragmentManager)
+                            }
+                        }
+
+                        // Floating Liquid Bottom Tabs
+                        var selectedIndex by remember { mutableIntStateOf(selectedOption) }
+
+                        // Listen to pager changes to update tabs
+                        LaunchedEffect(pagerState.currentPage) {
+                             selectedIndex = pagerState.currentPage
+                        }
+
+                        LiquidBottomTabs(
+                            selectedTabIndex = { selectedIndex },
+                            onTabSelected = { index ->
+                                selectedIndex = index
+                                selectedOption = index
+                                coroutineScope.launch {
+                                    pagerState.scrollToPage(index)
+                                }
+                            },
+                            backdrop = backdrop, // Use the captured content
+                            tabsCount = 3,
+                            modifier = Modifier
+                                .align(Alignment.BottomCenter)
+                                .padding(bottom = 32.dp, start = 24.dp, end = 24.dp)
+                                .padding(12.dp) // Internal padding for animation clipping
+                        ) {
+                            LiquidBottomTab(onClick = {
+                                selectedIndex = 0
+                                selectedOption = 0
+                                coroutineScope.launch { pagerState.scrollToPage(0) }
+                            }) {
+                                Icon(painterResource(R.drawable.ic_round_movie_filter_24), contentDescription = stringResource(R.string.anime))
+                                Text(stringResource(R.string.anime))
+                            }
+
+                            LiquidBottomTab(onClick = {
+                                selectedIndex = 1
+                                selectedOption = 1
+                                coroutineScope.launch { pagerState.scrollToPage(1) }
+                            }) {
+                                Icon(painterResource(R.drawable.ic_round_home_24), contentDescription = stringResource(R.string.home))
+                                Text(stringResource(R.string.home))
+                            }
+
+                            LiquidBottomTab(onClick = {
+                                selectedIndex = 2
+                                selectedOption = 2
+                                coroutineScope.launch { pagerState.scrollToPage(2) }
+                            }) {
+                                Icon(painterResource(R.drawable.ic_round_import_contacts_24), contentDescription = stringResource(R.string.manga))
+                                Text(stringResource(R.string.manga))
+                            }
+                        }
+
+                        // Glass Settings Overlay
+                        GlassSettingsOverlay(
+                            visible = GlassSettingsController.showSettingsOverlay.value,
+                            backdrop = backdrop,
+                            onDismiss = { GlassSettingsController.hide() },
+                            onLogout = {
+                                Anilist.removeSavedToken()
+                                startMainActivity(this@MainActivity)
+                                GlassSettingsController.hide()
+                            }
+                        )
+                    }
+                }
+            } else {
+                // Use ViewPager2 for other themes
+                binding.viewpager.visibility = View.VISIBLE
+                binding.includedNavbar.root.visibility = View.VISIBLE
+                binding.composeMainContent.visibility = View.GONE
+                
+                val mainViewPager = binding.viewpager
+                val navbar = binding.includedNavbar.navbar
+                
+                mainViewPager.isUserInputEnabled = false
+                mainViewPager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle)
+                mainViewPager.setPageTransformer(ZoomOutPageTransformer())
+
+                navbar.setOnItemSelectedListener { item ->
+                    when (item.itemId) {
+                        R.id.anime -> {
+                            selectedOption = 0
+                            mainViewPager.setCurrentItem(0, false)
+                            true
+                        }
+                        R.id.home -> {
+                            selectedOption = 1
+                            mainViewPager.setCurrentItem(1, false)
+                            true
+                        }
+                        R.id.manga -> {
+                            selectedOption = 2
+                            mainViewPager.setCurrentItem(2, false)
+                            true
+                        }
+                        else -> false
+                    }
+                }
+
+                if (mainViewPager.currentItem != selectedOption) {
+                    mainViewPager.post {
+                        mainViewPager.setCurrentItem(
+                            selectedOption,
+                            false
+                        )
+                        // Update navbar selection
+                        navbar.selectedItemId = when(selectedOption) {
+                            0 -> R.id.anime
+                            1 -> R.id.home
+                            2 -> R.id.manga
+                            else -> R.id.home
+                        }
+                    }
                 }
             }
             binding.includedNavbar.navbarContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
@@ -376,7 +526,7 @@ class MainActivity : AppCompatActivity() {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     if (!(PrefManager.getVal(PrefName.AllowOpeningLinks) as Boolean)) {
                         CustomBottomDialog.newInstance().apply {
-                            title = "Allow Dantotsu to automatically open Anilist & MAL Links?"
+                            title = "Allow ReDantotsu to automatically open Anilist & MAL Links?"
                             val md = "Open settings & click +Add Links & select Anilist & Mal urls"
                             addView(TextView(this@MainActivity).apply {
                                 val markWon =
@@ -439,7 +589,7 @@ class MainActivity : AppCompatActivity() {
         super.onConfigurationChanged(newConfig)
         val margin = if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) 8 else 32
         val params: ViewGroup.MarginLayoutParams =
-            binding.includedNavbar.navbar.layoutParams as ViewGroup.MarginLayoutParams
+            binding.includedNavbar.navbarContainer.layoutParams as ViewGroup.MarginLayoutParams
         params.updateMargins(bottom = margin.toPx)
     }
 
@@ -463,6 +613,18 @@ class MainActivity : AppCompatActivity() {
                     newRepos.add(url)
                     PrefManager.setVal(prefName, newRepos)
                     toast("$name Extension Repo added")
+                }
+
+                return
+            }
+            if (uri.scheme == "redantotsu" && uri.host == "payment-success") {
+                PrefManager.setVal(PrefName.IsSupporter, true)
+                PrefManager.setCustomVal("supporter_date", System.currentTimeMillis())
+                customAlertDialog().apply {
+                    setTitle("Thank You!")
+                    setMessage("Your support effectively helps keep ReDantotsu alive. You now have a supporter badge!")
+                    setPosButton("Awesome") { }
+                    show()
                 }
                 return
             }
@@ -559,3 +721,4 @@ class MainActivity : AppCompatActivity() {
     }
 
 }
+

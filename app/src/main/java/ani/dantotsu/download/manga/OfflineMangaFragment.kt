@@ -245,7 +245,7 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
                 val visibility = first != null && first.top < 0
                 scrollTop.isVisible = visibility
                 scrollTop.translationY =
-                    -(navBarHeight + bottomBar.height + bottomBar.marginBottom).toFloat()
+                    -(navBarHeight + (bottomBar?.height ?: 0) + (bottomBar?.marginBottom ?: 0)).toFloat()
             }
         })
 

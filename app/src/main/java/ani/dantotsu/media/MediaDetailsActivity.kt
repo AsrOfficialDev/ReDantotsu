@@ -63,7 +63,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
-import nl.joery.animatedbottombar.AnimatedBottomBar
+import ani.dantotsu.widgets.LiquidGlassBottomBar
 import kotlin.math.abs
 
 
@@ -73,7 +73,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
     private val scope = lifecycleScope
     private val model: MediaDetailsViewModel by viewModels()
     var selected = 0
-    lateinit var navBar: AnimatedBottomBar
+    lateinit var navBar: LiquidGlassBottomBar
     var anime = true
     private var adult = false
 
@@ -387,12 +387,12 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         }
         binding.commentInputLayout.isVisible = selected == 2
         navBar.selectTabAt(selected)
-        navBar.setOnTabSelectListener(object : AnimatedBottomBar.OnTabSelectListener {
+        navBar.setOnTabSelectListener(object : LiquidGlassBottomBar.OnTabSelectListener {
             override fun onTabSelected(
                 lastIndex: Int,
-                lastTab: AnimatedBottomBar.Tab?,
+                lastTab: LiquidGlassBottomBar.Tab?,
                 newIndex: Int,
-                newTab: AnimatedBottomBar.Tab
+                newTab: LiquidGlassBottomBar.Tab
             ) {
                 selected = newIndex
                 binding.commentInputLayout.isVisible = selected == 2
@@ -591,3 +591,4 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         var mediaSingleton: Media? = null
     }
 }
+

@@ -16,12 +16,12 @@ import ani.dantotsu.navBarHeight
 import ani.dantotsu.profile.activity.ActivityFragment.Companion.ActivityType
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
-import nl.joery.animatedbottombar.AnimatedBottomBar
+import ani.dantotsu.widgets.LiquidGlassBottomBar
 
 class FeedActivity : AppCompatActivity() {
     private lateinit var binding: ActivityNotificationBinding
     private var selected: Int = 0
-    lateinit var navBar: AnimatedBottomBar
+    lateinit var navBar: LiquidGlassBottomBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,12 +54,12 @@ class FeedActivity : AppCompatActivity() {
         binding.notificationViewPager.setOffscreenPageLimit(4)
         binding.notificationViewPager.setCurrentItem(selected, false)
         navBar.selectTabAt(selected)
-        navBar.setOnTabSelectListener(object : AnimatedBottomBar.OnTabSelectListener {
+        navBar.setOnTabSelectListener(object : LiquidGlassBottomBar.OnTabSelectListener {
             override fun onTabSelected(
                 lastIndex: Int,
-                lastTab: AnimatedBottomBar.Tab?,
+                lastTab: LiquidGlassBottomBar.Tab?,
                 newIndex: Int,
-                newTab: AnimatedBottomBar.Tab
+                newTab: LiquidGlassBottomBar.Tab
             ) {
                 selected = newIndex
                 binding.notificationViewPager.setCurrentItem(selected, false)
@@ -91,3 +91,5 @@ class FeedActivity : AppCompatActivity() {
         }
     }
 }
+
+

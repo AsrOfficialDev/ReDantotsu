@@ -20,7 +20,7 @@
         </item>
         <item name="snackbarTextViewStyle">@string/MySnackBarText</item>
         <item name="popupMenuStyle">@style/MyPopup</item>
-        <item name="android:windowSplashScreenAnimationDuration" tools:targetApi="s">1000</item>
+        <item name="android:windowSplashScreenAnimationDuration" tools:targetApi="s">500</item>
         <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">
             @drawable/anim_splash
         </item>
@@ -373,6 +373,92 @@
     <style name="Theme.Dantotsu.AppWidgetContainer" parent="Theme.Dantotsu.AppWidgetContainerParent">
         <!-- Apply padding to avoid the content of the widget colliding with the rounded corners -->
         <item name="appWidgetPadding">16dp</item>
+    </style>
+
+    <!-- Liquid Glass Theme (iOS 26 inspired) -->
+    <style name="Theme.Dantotsu.LiquidGlass" parent="Theme.Base">
+        <!-- Primary colors - Frosted glass cyan tint -->
+        <item name="colorPrimary">#80E3F2FD</item>
+        <item name="colorOnPrimary">#1A237E</item>
+        <item name="colorPrimaryContainer">#B3E3F2FD</item>
+        <item name="colorOnPrimaryContainer">#0D47A1</item>
+        
+        <!-- Secondary colors - Subtle glass gray -->
+        <item name="colorSecondary">#80ECEFF1</item>
+        <item name="colorOnSecondary">#37474F</item>
+        <item name="colorSecondaryContainer">#B3CFD8DC</item>
+        <item name="colorOnSecondaryContainer">#263238</item>
+        
+        <!-- Tertiary - Light glass accent -->
+        <item name="colorTertiary">#80B3E5FC</item>
+        <item name="colorOnTertiary">#01579B</item>
+        <item name="colorTertiaryContainer">#B3B3E5FC</item>
+        <item name="colorOnTertiaryContainer">#0277BD</item>
+        
+        <!-- Error colors -->
+        <item name="colorError">#B3FFCDD2</item>
+        <item name="colorErrorContainer">#B3FFEBEE</item>
+        <item name="colorOnError">#B71C1C</item>
+        <item name="colorOnErrorContainer">#C62828</item>
+        
+        <!-- Background - Semi-transparent frosted -->
+        <item name="android:colorBackground">#F0FAFAFA</item>
+        <item name="colorOnBackground">#212121</item>
+        
+        <!-- Surface - Glass-like translucent -->
+        <item name="colorSurface">#E6FFFFFF</item>
+        <item name="colorOnSurface">#212121</item>
+        <item name="colorSurfaceVariant">#D9E3F2FD</item>
+        <item name="colorOnSurfaceVariant">#37474F</item>
+        
+        <!-- Outline - Subtle glass edge -->
+        <item name="colorOutline">#4090CAF9</item>
+        <item name="colorOnSurfaceInverse">#FAFAFA</item>
+        <item name="colorSurfaceInverse">#263238</item>
+        <item name="colorPrimaryInverse">#90CAF9</item>
+    </style>
+
+    <!-- Liquid Glass OLED Theme (Dark glass) -->
+    <style name="Theme.Dantotsu.LiquidGlassOLED" parent="Theme.Base">
+        <!-- Primary colors - Dark frosted glass -->
+        <item name="colorPrimary">#801A237E</item>
+        <item name="colorOnPrimary">#E3F2FD</item>
+        <item name="colorPrimaryContainer">#B31A237E</item>
+        <item name="colorOnPrimaryContainer">#BBDEFB</item>
+        
+        <!-- Secondary - Dark glass gray -->
+        <item name="colorSecondary">#80263238</item>
+        <item name="colorOnSecondary">#ECEFF1</item>
+        <item name="colorSecondaryContainer">#B3455A64</item>
+        <item name="colorOnSecondaryContainer">#CFD8DC</item>
+        
+        <!-- Tertiary - Dark glass accent -->
+        <item name="colorTertiary">#8001579B</item>
+        <item name="colorOnTertiary">#B3E5FC</item>
+        <item name="colorTertiaryContainer">#B30277BD</item>
+        <item name="colorOnTertiaryContainer">#81D4FA</item>
+        
+        <!-- Error colors -->
+        <item name="colorError">#80B71C1C</item>
+        <item name="colorErrorContainer">#80C62828</item>
+        <item name="colorOnError">#FFCDD2</item>
+        <item name="colorOnErrorContainer">#EF9A9A</item>
+        
+        <!-- Background - True black with glass hint -->
+        <item name="android:colorBackground">#000000</item>
+        <item name="colorOnBackground">#E0E0E0</item>
+        
+        <!-- Surface - Dark glass translucent -->
+        <item name="colorSurface">#1A1A1A</item>
+        <item name="colorOnSurface">#E0E0E0</item>
+        <item name="colorSurfaceVariant">#26263238</item>
+        <item name="colorOnSurfaceVariant">#B0BEC5</item>
+        
+        <!-- Outline - Subtle dark glass edge -->
+        <item name="colorOutline">#401A237E</item>
+        <item name="colorOnSurfaceInverse">#212121</item>
+        <item name="colorSurfaceInverse">#E0E0E0</item>
+        <item name="colorPrimaryInverse">#1A237E</item>
     </style>
 
 </resources>

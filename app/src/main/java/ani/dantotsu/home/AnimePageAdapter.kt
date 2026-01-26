@@ -37,6 +37,7 @@ import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.setSlideIn
 import ani.dantotsu.setSlideUp
 import ani.dantotsu.settings.SettingsDialogFragment
+import ani.dantotsu.widgets.GlassSettingsController
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.statusBarHeight
@@ -99,9 +100,14 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
         }
 
         trendingBinding.userAvatar.setSafeOnClickListener {
-            val dialogFragment =
-                SettingsDialogFragment.newInstance(SettingsDialogFragment.Companion.PageType.ANIME)
-            dialogFragment.show((it.context as AppCompatActivity).supportFragmentManager, "dialog")
+            val isLiquidGlassTheme = PrefManager.getVal<String>(PrefName.Theme) == "LIQUID_GLASS"
+            if (isLiquidGlassTheme) {
+                GlassSettingsController.show()
+            } else {
+                val dialogFragment =
+                    SettingsDialogFragment.newInstance(SettingsDialogFragment.Companion.PageType.ANIME)
+                dialogFragment.show((it.context as AppCompatActivity).supportFragmentManager, "dialog")
+            }
         }
         trendingBinding.userAvatar.setOnLongClickListener { view ->
             view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)

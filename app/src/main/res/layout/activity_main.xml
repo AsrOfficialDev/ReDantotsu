@@ -17,7 +17,16 @@
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:visibility="visible" />
+
+    <!-- Compose pager for Liquid Glass theme -->
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/compose_main_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
 
     <include
         android:id="@+id/included_navbar"

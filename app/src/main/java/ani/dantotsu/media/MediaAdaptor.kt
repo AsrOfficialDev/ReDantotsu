@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.R
 import ani.dantotsu.blurImage
+import ani.dantotsu.connections.jikan.JikanService
 import ani.dantotsu.currActivity
 import ani.dantotsu.databinding.ItemMediaCompactBinding
 import ani.dantotsu.databinding.ItemMediaLargeBinding
@@ -32,6 +33,9 @@ import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import com.flaviofaria.kenburnsview.RandomTransitionGenerator
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.Serializable
 
 
@@ -95,13 +99,56 @@ class MediaAdaptor(
                     b.itemCompactOngoing.isVisible =
                         media.status == currActivity()!!.getString(R.string.status_releasing)
                     b.itemCompactTitle.text = media.userPreferredName
-                    b.itemCompactScore.text =
-                        ((if (media.userScore == 0) (media.meanScore
-                            ?: 0) else media.userScore) / 10.0).toString()
-                    b.itemCompactScoreBG.background = ContextCompat.getDrawable(
-                        b.root.context,
-                        (if (media.userScore != 0) R.drawable.item_user_score else R.drawable.item_score)
-                    )
+                    
+                    // Anilist Score Display (cyan badge)
+                    val anilistScore = if (media.userScore != 0) media.userScore else (media.meanScore ?: 0)
+                    b.itemCompactScore.text = (anilistScore / 10.0).toString()
+                    
+                    // MAL Score Display (blue badge)
+                    if (media.malScore != null && media.malScore!! > 0) {
+                        b.itemCompactMalScoreBG.visibility = View.VISIBLE
+                        b.itemCompactMalScore.text = String.format("%.1f", media.malScore)
+                    } else {
+                        b.itemCompactMalScoreBG.visibility = View.GONE
+                        // Fetch MAL score asynchronously if we have a MAL ID
+                        media.idMAL?.let { malId ->
+                            CoroutineScope(Dispatchers.Main).launch {
+                                val score = JikanService.getAnimeScore(malId)
+                                    ?: JikanService.getMangaScore(malId)
+                                if (score != null && score > 0) {
+                                    media.malScore = score
+                                    b.itemCompactMalScoreBG.visibility = View.VISIBLE
+                                    b.itemCompactMalScore.text = String.format("%.1f", score)
+                                }
+                            }
+                        }
+                    }
+                    
+                    // Countdown Timer for Calendar items
+                    if (media.airingAtTimestamp != null && media.airingAtTimestamp!! > 0) {
+                        val currentTime = System.currentTimeMillis() / 1000
+                        val airingAt = media.airingAtTimestamp!!
+                        if (airingAt > currentTime) {
+                            b.itemCompactCountdown.visibility = View.VISIBLE
+                            val diff = airingAt - currentTime
+                            val days = diff / 86400
+                            val hours = (diff % 86400) / 3600
+                            val minutes = (diff % 3600) / 60
+                            val countdownText = if (days > 0) {
+                                "${media.relation} • ${days}d ${hours}h"
+                            } else if (hours > 0) {
+                                "${media.relation} • ${hours}h ${minutes}m"
+                            } else {
+                                "${media.relation} • ${minutes}m"
+                            }
+                            b.itemCompactCountdown.text = countdownText
+                        } else {
+                            b.itemCompactCountdown.visibility = View.GONE
+                        }
+                    } else {
+                        b.itemCompactCountdown.visibility = View.GONE
+                    }
+                    
                     b.itemCompactUserProgress.text = (media.userProgress ?: "~").toString()
                     if (media.relation != null) {
                         b.itemCompactRelation.text = "${media.relation}  "

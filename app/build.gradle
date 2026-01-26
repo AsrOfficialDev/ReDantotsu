@@ -4,6 +4,7 @@ plugins {
     id 'kotlinx-serialization'
     id 'org.jetbrains.kotlin.android'
     id 'com.google.devtools.ksp'
+    id 'org.jetbrains.kotlin.plugin.compose' version '2.2.0'
 }
 
 def gitCommitHash = providers.exec {
@@ -14,11 +15,11 @@ android {
     compileSdk 35
 
     defaultConfig {
-        applicationId "ani.dantotsu"
-        minSdk 21
+        applicationId "app.redantotsu.asr"
+        minSdk 23
         targetSdk 35
-        versionName "3.2.2"
-        versionCode 300200200
+        versionName "1.0.0"
+        versionCode 100000000
         signingConfig signingConfigs.debug
 
     }
@@ -41,15 +42,15 @@ android {
 
     buildTypes {
         alpha {
-            applicationIdSuffix ".beta" // keep as beta by popular request
-            versionNameSuffix "-alpha01-" + gitCommitHash
+            // applicationIdSuffix ".beta" // Removed to match exact Firebase package
+            versionNameSuffix ""
             manifestPlaceholders.icon_placeholder = "@mipmap/ic_launcher_alpha"
             manifestPlaceholders.icon_placeholder_round = "@mipmap/ic_launcher_alpha_round"
             debuggable System.getenv("CI") == null
             isDefault true
         }
         debug {
-            applicationIdSuffix ".beta"
+            // applicationIdSuffix ".beta"
             versionNameSuffix "-beta01"
             manifestPlaceholders.icon_placeholder = "@mipmap/ic_launcher_beta"
             manifestPlaceholders.icon_placeholder_round = "@mipmap/ic_launcher_beta_round"
@@ -65,6 +66,7 @@ android {
     buildFeatures {
         viewBinding true
         buildConfig true
+        compose true
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
@@ -75,6 +77,25 @@ android {
         freeCompilerArgs = ["-Xcontext-receivers", "-Xmulti-platform"]
     }
     namespace 'ani.dantotsu'
+    
+    // ABI splits for generating separate APKs per architecture
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'armeabi-v7a', 'arm64-v8a'
+            universalApk true  // Also generate a universal APK
+        }
+    }
+    
+    // Custom APK naming
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def abi = output.getFilter(com.android.build.OutputFile.ABI)
+            if (abi == null) abi = "universal"
+            outputFileName = "ReDantotsu-${abi}-${variant.buildType.name}.apk"
+        }
+    }
 }
 
 dependencies {
@@ -125,9 +146,24 @@ dependencies {
 // Media3 extension
     implementation "com.github.anilbeesetti.nextlib:nextlib-media3ext:0.8.3"
 
+//  Jetpack Compose
+    def composeBom = platform('androidx.compose:compose-bom:2024.02.00')
+    implementation composeBom
+    implementation 'androidx.compose.ui:ui'
+    implementation 'androidx.compose.ui:ui-graphics'
+    implementation 'androidx.compose.ui:ui-tooling-preview'
+    implementation 'androidx.compose.material3:material3'
+    implementation 'androidx.activity:activity-compose:1.8.2'
+    debugImplementation 'androidx.compose.ui:ui-tooling'
+    implementation "io.coil-kt:coil-compose:2.6.0"
+
+//  Android Liquid Glass (Backdrop)
+    implementation 'io.github.kyant0:backdrop:1.0.0-rc02'
+    implementation 'io.github.kyant0:capsule:2.1.2'
+
 //  UI
+    implementation 'com.github.Dimezis:BlurView:version-2.0.3'
     implementation 'com.google.android.material:material:1.12.0'
-    implementation 'com.github.RepoDevil:AnimatedBottomBar:7fcb9af'
     implementation 'com.flaviofaria:kenburnsview:1.0.7'
     implementation 'com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0'
     implementation 'com.alexvasilkov:gesture-views:2.8.3'

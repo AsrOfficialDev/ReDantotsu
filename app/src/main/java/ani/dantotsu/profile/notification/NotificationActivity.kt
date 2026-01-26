@@ -23,12 +23,12 @@ import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
-import nl.joery.animatedbottombar.AnimatedBottomBar
+import ani.dantotsu.widgets.LiquidGlassBottomBar
 
 class NotificationActivity : AppCompatActivity() {
     lateinit var binding: ActivityNotificationBinding
     private var selected: Int = 0
-    lateinit var navBar: AnimatedBottomBar
+    lateinit var navBar: LiquidGlassBottomBar
     private val CommentsEnabled = PrefManager.getVal<Int>(PrefName.CommentsEnabled) == 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,12 +65,12 @@ class NotificationActivity : AppCompatActivity() {
             ViewPagerAdapter(supportFragmentManager, lifecycle, getOne, CommentsEnabled)
         binding.notificationViewPager.setCurrentItem(selected, false)
         navBar.selectTabAt(selected)
-        navBar.setOnTabSelectListener(object : AnimatedBottomBar.OnTabSelectListener {
+        navBar.setOnTabSelectListener(object : LiquidGlassBottomBar.OnTabSelectListener {
             override fun onTabSelected(
                 lastIndex: Int,
-                lastTab: AnimatedBottomBar.Tab?,
+                lastTab: LiquidGlassBottomBar.Tab?,
                 newIndex: Int,
-                newTab: AnimatedBottomBar.Tab
+                newTab: LiquidGlassBottomBar.Tab
             ) {
                 selected = newIndex
                 binding.notificationViewPager.setCurrentItem(selected, false)
@@ -102,3 +102,4 @@ class NotificationActivity : AppCompatActivity() {
         }
     }
 }
+

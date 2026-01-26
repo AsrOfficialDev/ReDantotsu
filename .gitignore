@@ -33,6 +33,41 @@ output.json
 *.hprof
 
 #other
+# Gradle files
+.gradle/
+build/
+
+#kotlin
+.kotlin/
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Log/OS Files
+*.log
+
+# Secrets
+apikey.properties
+
+# Android Studio generated files and folders
+captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+output.json
+
+# IntelliJ
+*.iml
+.idea/
+
+# Keystore files
+*.jks
+*.keystore
+
+# Android Profiling
+*.hprof
+
+#other
 scripts/
 
 #crowdin
@@ -40,3 +75,4 @@ crowdin.yml
 
 #vscode
 .vscode
+google-services.json

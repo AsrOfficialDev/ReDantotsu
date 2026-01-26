@@ -28,6 +28,7 @@ import ani.dantotsu.bottomBar
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.AnilistHomeViewModel
 import ani.dantotsu.connections.anilist.getUserId
+import ani.dantotsu.getThemeColor
 import ani.dantotsu.currContext
 import ani.dantotsu.databinding.FragmentHomeBinding
 import ani.dantotsu.home.status.UserStatusAdapter
@@ -42,6 +43,7 @@ import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.setSlideIn
 import ani.dantotsu.setSlideUp
 import ani.dantotsu.settings.SettingsDialogFragment
+import ani.dantotsu.widgets.GlassSettingsController
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefManager.asLiveBool
 import ani.dantotsu.settings.saving.PrefName
@@ -95,6 +97,10 @@ class HomeFragment : Fragment() {
                         && PrefManager.getVal<Boolean>(PrefName.ShowNotificationRedDot) == true
                 binding.homeNotificationCount.text = Anilist.unreadNotificationCount.toString()
 
+                // Show supporter badge and glow if user is a supporter
+                val isSupporter: Boolean = PrefManager.getVal(PrefName.IsSupporter)
+                binding.homeSupporterBadge.isVisible = isSupporter
+                binding.homeSupporterGlow.isVisible = isSupporter
                 binding.homeAnimeList.setOnClickListener {
                     ContextCompat.startActivity(
                         requireActivity(), Intent(requireActivity(), ListActivity::class.java)
@@ -126,12 +132,18 @@ class HomeFragment : Fragment() {
             }
         }
         binding.homeUserAvatarContainer.setSafeOnClickListener {
-            val dialogFragment =
-                SettingsDialogFragment.newInstance(SettingsDialogFragment.Companion.PageType.HOME)
-            dialogFragment.show(
-                (it.context as androidx.appcompat.app.AppCompatActivity).supportFragmentManager,
-                "dialog"
-            )
+            val isLiquidGlassTheme = PrefManager.getVal<String>(PrefName.Theme) == "LIQUID_GLASS"
+            if (isLiquidGlassTheme) {
+                // Show Compose glass settings overlay
+                GlassSettingsController.show()
+            } else {
+                val dialogFragment =
+                    SettingsDialogFragment.newInstance(SettingsDialogFragment.Companion.PageType.HOME)
+                dialogFragment.show(
+                    (it.context as androidx.appcompat.app.AppCompatActivity).supportFragmentManager,
+                    "dialog"
+                )
+            }
         }
         binding.searchImageContainer.setSafeOnClickListener {
             SearchBottomSheet.newInstance().show(
@@ -162,14 +174,16 @@ class HomeFragment : Fragment() {
             binding.homeScroll.setOnScrollChangeListener { _, _, _, _, _ ->
                 if (!binding.homeScroll.canScrollVertically(1)) {
                     reached = true
-                    bottomBar.animate().translationZ(0f).setDuration(duration).start()
-                    ObjectAnimator.ofFloat(bottomBar, "elevation", 4f, 0f).setDuration(duration)
-                        .start()
+                    bottomBar?.animate()?.translationZ(0f)?.setDuration(duration)?.start()
+                    bottomBar?.let { bar ->
+                        ObjectAnimator.ofFloat(bar, "elevation", 4f, 0f).setDuration(duration).start()
+                    }
                 } else {
                     if (reached) {
-                        bottomBar.animate().translationZ(12f).setDuration(duration).start()
-                        ObjectAnimator.ofFloat(bottomBar, "elevation", 0f, 4f).setDuration(duration)
-                            .start()
+                        bottomBar?.animate()?.translationZ(12f)?.setDuration(duration)?.start()
+                        bottomBar?.let { bar ->
+                            ObjectAnimator.ofFloat(bar, "elevation", 0f, 4f).setDuration(duration).start()
+                        }
                     }
                 }
             }
@@ -276,7 +290,7 @@ class HomeFragment : Fragment() {
             getString(R.string.continue_watching)
         )
         binding.homeWatchingBrowseButton.setOnClickListener {
-            bottomBar.selectTabAt(0)
+            bottomBar?.selectTabAt(0)
         }
 
         initRecyclerView(
@@ -301,7 +315,7 @@ class HomeFragment : Fragment() {
             getString(R.string.planned_anime)
         )
         binding.homePlannedAnimeBrowseButton.setOnClickListener {
-            bottomBar.selectTabAt(0)
+            bottomBar?.selectTabAt(0)
         }
 
         initRecyclerView(
@@ -315,7 +329,7 @@ class HomeFragment : Fragment() {
             getString(R.string.continue_reading)
         )
         binding.homeReadingBrowseButton.setOnClickListener {
-            bottomBar.selectTabAt(2)
+            bottomBar?.selectTabAt(2)
         }
 
         initRecyclerView(
@@ -340,7 +354,7 @@ class HomeFragment : Fragment() {
             getString(R.string.planned_manga)
         )
         binding.homePlannedMangaBrowseButton.setOnClickListener {
-            bottomBar.selectTabAt(2)
+            bottomBar?.selectTabAt(2)
         }
 
         initRecyclerView(

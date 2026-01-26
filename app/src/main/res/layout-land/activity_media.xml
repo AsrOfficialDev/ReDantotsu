@@ -420,18 +420,14 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    <nl.joery.animatedbottombar.AnimatedBottomBar
+    <ani.dantotsu.widgets.LiquidGlassBottomBar
         android:id="@+id/mediaBottomBar"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal|bottom"
         android:layout_weight="0"
-        android:background="?attr/colorSurface"
         android:padding="0dp"
-        app:abb_animationInterpolator="@anim/over_shoot"
-        app:abb_isVerticalBar="true"
-        app:abb_selectedTabType="text"
-        app:abb_textAppearance="@style/NavBarText"
+        android:elevation="8dp"
         app:itemActiveIndicatorStyle="@style/BottomNavBar"
         app:itemIconTint="@color/tab_layout_icon"
         app:itemRippleColor="#00000000"
@@ -440,3 +436,4 @@
         app:itemTextColor="@color/tab_layout_icon" />
 
 </LinearLayout>
+

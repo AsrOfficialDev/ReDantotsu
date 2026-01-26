@@ -105,11 +105,14 @@
                 android:paddingTop="16dp"
                 android:paddingBottom="16dp">
 
-                <ImageView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/settingBuyMeCoffee"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_bmc_button"
+                    android:text="@string/support_me"
+                    app:icon="@drawable/ic_round_favorite_24"
+                    app:cornerRadius="12dp"
+                    style="@style/Widget.Material3.Button.TonalButton"
                     tools:ignore="ContentDescription" />
             </LinearLayout>
 

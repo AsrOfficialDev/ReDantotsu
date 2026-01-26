@@ -35,12 +35,30 @@ import ani.dantotsu.util.customAlertDialog
 import eu.kanade.tachiyomi.util.system.getSerializableCompat
 import java.util.Timer
 import kotlin.concurrent.schedule
+import android.view.WindowManager
+import android.os.Build
+import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.ColorDrawable
+
+
+
 
 class SettingsDialogFragment : BottomSheetDialogFragment() {
     private var _binding: BottomSheetSettingsBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var pageType: PageType
+
+    override fun getTheme(): Int {
+        // Use transparent theme for Liquid Glass, otherwise use default
+        val isLiquidGlassTheme = PrefManager.getVal<String>(PrefName.Theme) == "LIQUID_GLASS"
+        return if (isLiquidGlassTheme) {
+            R.style.TransparentBottomSheetDialog
+        } else {
+            super.getTheme()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         pageType = arguments?.getSerializableCompat("pageType") as? PageType ?: PageType.HOME
@@ -58,6 +76,17 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val window = dialog?.window
+        val isLiquidGlassTheme = PrefManager.getVal<String>(PrefName.Theme) == "LIQUID_GLASS"
+
+        if (isLiquidGlassTheme) {
+            // Window transparency and dim settings - the actual glass effect is in onStart()
+            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            window?.setDimAmount(0f)
+        } else {
+            binding.settingsContainer.setBackgroundResource(R.drawable.bottom_sheet_background)
+        }
+
+
         window?.statusBarColor = Color.CYAN
         window?.navigationBarColor =
             requireContext().getThemeColor(com.google.android.material.R.attr.colorSurface)
@@ -179,6 +208,30 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
                 dismiss()
                 PrefManager.setVal(PrefName.OfflineMode, isChecked)
             }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val isLiquidGlassTheme = PrefManager.getVal<String>(PrefName.Theme) == "LIQUID_GLASS"
+        
+        // Get the BottomSheet container
+        val sheet = dialog?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+        
+        if (isLiquidGlassTheme && sheet != null) {
+            sheet.background = ColorDrawable(Color.TRANSPARENT)
+
+            // Native Window Blur for Android 12+ (API 31+)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                dialog?.window?.addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND)
+                dialog?.window?.attributes?.blurBehindRadius = 64
+                dialog?.window?.attributes = dialog?.window?.attributes
+            }
+
+            // Use colorSurface with 60% alpha for glass effect (same as bottom bar overlay)
+            val surfaceColor = requireContext().getThemeColor(com.google.android.material.R.attr.colorSurface)
+            val glassColor = Color.argb(153, Color.red(surfaceColor), Color.green(surfaceColor), Color.blue(surfaceColor)) // 60% alpha
+            binding.settingsContainer.setBackgroundColor(glassColor)
         }
     }
 

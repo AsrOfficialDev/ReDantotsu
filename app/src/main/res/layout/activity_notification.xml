@@ -54,7 +54,7 @@
 
     </LinearLayout>
 
-    <nl.joery.animatedbottombar.AnimatedBottomBar
+    <ani.dantotsu.widgets.LiquidGlassBottomBar
         android:id="@+id/notificationNavBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -62,12 +62,6 @@
         android:layout_marginTop="-67dp"
         android:background="?attr/colorSurface"
         android:padding="0dp"
-        app:abb_animationInterpolator="@anim/over_shoot"
-        app:abb_indicatorAppearance="round"
-        app:abb_indicatorLocation="top"
-        app:abb_indicatorMargin="28dp"
-        app:abb_selectedTabType="text"
-        app:abb_textAppearance="@style/NavBarText"
         app:itemActiveIndicatorStyle="@style/BottomNavBar"
         app:itemIconTint="@color/tab_layout_icon"
         app:itemRippleColor="#00000000"

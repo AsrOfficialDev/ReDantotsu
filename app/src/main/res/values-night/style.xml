@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dark Mode Glass Style - matches AndroidLiquidGlass DialogContent.kt -->
+    <!-- Dark: #121212 at 40% opacity for frosted dark glass look -->
+    <style name="LiquidGlassBottomSheetStyle" parent="Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="backgroundTint">#66121212</item>
+        <item name="shapeAppearance">@style/LiquidGlassShapeAppearance</item>
+    </style>
+</resources>

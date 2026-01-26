@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    
+    <!-- Semi-transparent background for night mode -->
+    <solid android:color="#D9121212" />
+    
+    <!-- Pill shape corners -->
+    <corners android:radius="40dp" />
+    
+    <!-- Subtle border -->
+    <stroke
+        android:width="1dp"
+        android:color="#26FFFFFF" />
+    
+</shape>

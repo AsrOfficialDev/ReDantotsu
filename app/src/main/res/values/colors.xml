@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="ic_launcher_bg">#1A1A2E</color>
     <color name="violet_400">#91A6FF</color>
     <color name="violet_700">#3358FF</color>
     <color name="violet_400_50">#8091A6FF</color>

@@ -29,7 +29,34 @@ import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.themes.ThemeManager
-import nl.joery.animatedbottombar.AnimatedBottomBar
+import ani.dantotsu.widgets.LiquidBottomTabs
+import ani.dantotsu.widgets.LiquidBottomTab
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import com.kyant.backdrop.backdrops.rememberLayerBackdrop
+
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.Box
+import androidx.compose.ui.Alignment
+import androidx.compose.foundation.layout.fillMaxSize
+import com.kyant.backdrop.backdrops.layerBackdrop
+import eightbitlab.com.blurview.BlurView
+import com.google.android.material.bottomnavigation.BottomNavigationView
+
 
 class NoInternet : AppCompatActivity() {
     private lateinit var binding: ActivityNoInternetBinding
@@ -41,16 +68,7 @@ class NoInternet : AppCompatActivity() {
         binding = ActivityNoInternetBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val bottomBar = findViewById<AnimatedBottomBar>(R.id.navbar)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-
-            val backgroundDrawable = bottomBar.background as GradientDrawable
-            val currentColor = backgroundDrawable.color?.defaultColor ?: 0
-            val semiTransparentColor = (currentColor and 0x00FFFFFF) or 0xE8000000.toInt()
-            backgroundDrawable.setColor(semiTransparentColor)
-            bottomBar.background = backgroundDrawable
-        }
-        bottomBar.background = ContextCompat.getDrawable(this, R.drawable.bottom_nav_gray)
+        // LiquidGlassBottomBar handles its own glass background drawing
 
 
         var doubleBackToExitPressedOnce = false
@@ -74,31 +92,134 @@ class NoInternet : AppCompatActivity() {
                 bottomMargin = navBarHeight
             }
         }
-        val navbar = binding.includedNavbar.navbar
-        ani.dantotsu.bottomBar = navbar
-        navbar.visibility = View.VISIBLE
-        val mainViewPager = binding.viewpager
-        mainViewPager.isUserInputEnabled = false
-        mainViewPager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle)
-        mainViewPager.setPageTransformer(ZoomOutPageTransformer())
-        navbar.setOnTabSelectListener(object :
-            AnimatedBottomBar.OnTabSelectListener {
-            override fun onTabSelected(
-                lastIndex: Int,
-                lastTab: AnimatedBottomBar.Tab?,
-                newIndex: Int,
-                newTab: AnimatedBottomBar.Tab
-            ) {
-                navbar.animate().translationZ(12f).setDuration(200).start()
-                selectedOption = newIndex
-                mainViewPager.setCurrentItem(newIndex, false)
+
+        // Check if Liquid Glass theme is active
+        val isLiquidGlassTheme = PrefManager.getVal<String>(PrefName.Theme) == "LIQUID_GLASS"
+        
+        if (isLiquidGlassTheme) {
+            // Use Compose HorizontalPager for Liquid Glass theme
+            binding.viewpager.visibility = View.GONE
+            binding.includedNavbar.root.visibility = View.GONE
+            binding.composeMainContent.visibility = View.VISIBLE
+            
+            binding.composeMainContent.setContent {
+                val pagerState = rememberPagerState(
+                    initialPage = selectedOption,
+                    pageCount = { 3 }
+                )
+                val coroutineScope = rememberCoroutineScope()
+                val backdrop = rememberLayerBackdrop()
+
+                // Sync pager to selectedOption changes ONLY
+                LaunchedEffect(selectedOption) {
+                    if (pagerState.currentPage != selectedOption) {
+                        pagerState.scrollToPage(selectedOption)
+                    }
+                }
+                
+                Box(modifier = Modifier.fillMaxSize()) {
+                    // Main content pager (offline fragments)
+                    HorizontalPager(
+                        state = pagerState,
+                        userScrollEnabled = false,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .layerBackdrop(backdrop)
+                    ) { page ->
+                        when (page) {
+                            0 -> OfflineAnimePageComposable(supportFragmentManager)
+                            1 -> OfflineHomePageComposable(supportFragmentManager)
+                            2 -> OfflineMangaPageComposable(supportFragmentManager)
+                        }
+                    }
+                    
+                    LiquidBottomTabs(
+                        selectedTabIndex = { selectedOption },
+                        onTabSelected = { index ->
+                            selectedOption = index
+                            coroutineScope.launch { pagerState.scrollToPage(index) }
+                        },
+                        backdrop = backdrop,
+                        tabsCount = 3,
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .padding(bottom = 32.dp, start = 24.dp, end = 24.dp)
+                            .padding(12.dp)
+                    ) {
+                        LiquidBottomTab(onClick = {
+                            selectedOption = 0
+                            coroutineScope.launch { pagerState.scrollToPage(0) }
+                        }) {
+                            Icon(painterResource(R.drawable.ic_round_movie_filter_24), contentDescription = stringResource(R.string.anime))
+                            Text(stringResource(R.string.anime))
+                        }
+
+                        LiquidBottomTab(onClick = {
+                            selectedOption = 1
+                            coroutineScope.launch { pagerState.scrollToPage(1) }
+                        }) {
+                            Icon(painterResource(R.drawable.ic_round_home_24), contentDescription = stringResource(R.string.home))
+                            Text(stringResource(R.string.home))
+                        }
+
+                        LiquidBottomTab(onClick = {
+                            selectedOption = 2
+                            coroutineScope.launch { pagerState.scrollToPage(2) }
+                        }) {
+                            Icon(painterResource(R.drawable.ic_round_import_contacts_24), contentDescription = stringResource(R.string.manga))
+                            Text(stringResource(R.string.manga))
+                        }
+                    }
+                }
             }
-        })
-        navbar.selectTabAt(selectedOption)
+        } else {
+            // Use ViewPager2 for other themes
+            binding.viewpager.visibility = View.VISIBLE
+            binding.includedNavbar.root.visibility = View.VISIBLE
+            binding.composeMainContent.visibility = View.GONE
+            
+            val mainViewPager = binding.viewpager
+            val navbar = binding.includedNavbar.navbar
+            
+            mainViewPager.isUserInputEnabled = false
+            mainViewPager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle)
+            mainViewPager.setPageTransformer(ZoomOutPageTransformer())
 
-        //supportFragmentManager.beginTransaction().replace(binding.fragmentContainer.id, OfflineFragment()).commit()
+            navbar.setOnItemSelectedListener { item ->
+               when (item.itemId) {
+                    R.id.anime -> {
+                        selectedOption = 0
+                        mainViewPager.setCurrentItem(0, false)
+                        true
+                    }
+                    R.id.home -> {
+                        selectedOption = 1
+                        mainViewPager.setCurrentItem(1, false)
+                        true
+                    }
+                    R.id.manga -> {
+                        selectedOption = 2
+                        mainViewPager.setCurrentItem(2, false)
+                        true
+                    }
+                    else -> false
+                }
+            }
 
+            if (mainViewPager.currentItem != selectedOption) {
+                mainViewPager.post {
+                    mainViewPager.setCurrentItem(selectedOption, false)
+                    navbar.selectedItemId = when(selectedOption) {
+                        0 -> R.id.anime
+                        1 -> R.id.home
+                        2 -> R.id.manga
+                        else -> R.id.home
+                    }
+                }
+            }
+        }
     }
+
 
     private class ViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
         FragmentStateAdapter(fragmentManager, lifecycle) {
@@ -114,3 +235,4 @@ class NoInternet : AppCompatActivity() {
         }
     }
 }
+
