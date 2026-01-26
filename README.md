@@ -36,7 +36,9 @@ ReDantotsu is a premium remake of the beloved Dantotsu anime & manga app, featur
 
 ## 📸 Screenshots
 
-*Coming soon*
+| Home | Manga | Anime |
+|:---:|:---:|:---:|
+| <img src="https://i.postimg.cc/Hn4Lk7DY/Home_page.jpg" width="300" /> | <img src="https://i.postimg.cc/Wz641JLk/Manga_page.jpg" width="300" /> | <img src="https://i.postimg.cc/KjrY8gSg/Anime_page.jpg" width="300" /> |
 
 ## 📥 Installation
 
