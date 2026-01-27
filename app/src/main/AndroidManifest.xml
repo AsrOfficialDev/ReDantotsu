@@ -272,8 +272,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="anilist"
-                    android:scheme="dantotsu" />
+                    android:host="auth"
+                    android:scheme="redantotsu" />
             </intent-filter>
         </activity>
         <activity

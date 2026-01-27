@@ -1,4 +1,4 @@
-# 1.0.1
+# 1.0.2
 
 - **Bugfixes:**
   - Fix a crash after watching a video

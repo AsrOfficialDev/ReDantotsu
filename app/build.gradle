@@ -18,8 +18,8 @@ android {
         applicationId "app.redantotsu.asr"
         minSdk 23
         targetSdk 35
-        versionName "1.0.1"
-        versionCode 100000001
+        versionName "1.0.2"
+        versionCode 100000002
         signingConfig signingConfigs.debug
 
     }
