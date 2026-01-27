@@ -55,13 +55,8 @@ object AppUpdater {
         return try {
             fetchFromGithub(repo, isDebug)
         } catch (e: Exception) {
-            Logger.log("Github fetch failed, trying fallback: ${e.message}")
-            try {
-                fetchFromFallback(isDebug)
-            } catch (e: Exception) {
-                Logger.log("Fallback fetch failed: ${e.message}")
-                null
-            }
+            Logger.log("Github fetch failed: ${e.message}")
+            null
         }
     }
 
@@ -78,42 +73,28 @@ object AppUpdater {
             val v = r.tagName.substringAfter("v", "")
             (r.body ?: "") to v.ifEmpty { throw Exception("Weird Version : ${r.tagName}") }
         } else {
-            val res = client.get("https://raw.githubusercontent.com/$repo/main/stable.md").text
-            res to res.substringAfter("# ").substringBefore("\n")
+            val res = client.get("https://api.github.com/repos/$repo/releases/latest")
+                .parsed<GithubResponse>()
+            val v = res.tagName.substringAfter("v", "")
+            (res.body ?: "") to v.ifEmpty { throw Exception("Weird Version : ${res.tagName}") }
         }
-    }
-
-    private suspend fun fetchFromFallback(isDebug: Boolean): Pair<String, String> {
-        val url = if (isDebug) fallbackBetaUrl else fallbackStableUrl
-        val response = CommentsAPI.requestBuilder().get(url).parsed<FallbackResponse>()
-        return response.changelog to response.version
     }
 
     private suspend fun fetchApkUrl(repo: String, version: String, isDebug: Boolean): String? {
         return try {
             fetchApkUrlFromGithub(repo, version)
         } catch (e: Exception) {
-            Logger.log("Github APK fetch failed, trying fallback: ${e.message}")
-            try {
-                fetchApkUrlFromFallback(version, isDebug)
-            } catch (e: Exception) {
-                Logger.log("Fallback APK fetch failed: ${e.message}")
-                null
-            }
+            Logger.log("Github APK fetch failed: ${e.message}")
+            null
         }
     }
 
     private suspend fun fetchApkUrlFromGithub(repo: String, version: String): String? {
-        val apks = client.get("https://api.github.com/repos/$repo/releases/tags/v$version")
+         val apks = client.get("https://api.github.com/repos/$repo/releases/tags/v$version")
             .parsed<GithubResponse>().assets?.filter {
                 it.browserDownloadURL.endsWith(".apk")
             }
         return apks?.firstOrNull()?.browserDownloadURL
-    }
-
-    private suspend fun fetchApkUrlFromFallback(version: String, isDebug: Boolean): String? {
-        val url = if (isDebug) fallbackBetaUrl else fallbackStableUrl
-        return CommentsAPI.requestBuilder().get("$url/$version").parsed<FallbackResponse>().downloadUrl
     }
 
     suspend fun check(activity: FragmentActivity, post: Boolean = false) {
@@ -157,7 +138,7 @@ object AppUpdater {
                                 if (apkUrl != null) {
                                     activity.downloadUpdate(version, apkUrl)
                                 } else {
-                                    openLinkInBrowser("https://github.com/repos/$repo/releases/tag/v$version")
+                                    openLinkInBrowser("https://github.com/$repo/releases/tag/v$version")
                                 }
                             } catch (e: Exception) {
                                 logError(e)
@@ -191,10 +172,14 @@ object AppUpdater {
                         }
                     }.sum()
                 }
-
-                val new = toDouble(version.split("."))
-                val curr = toDouble(BuildConfig.VERSION_NAME.split("."))
-                new > curr
+                
+                try {
+                	val new = toDouble(version.split("."))
+                	val curr = toDouble(BuildConfig.VERSION_NAME.split("."))
+                	new > curr
+                } catch (e: Exception) {
+                	false
+                }
             }
         }
     }
