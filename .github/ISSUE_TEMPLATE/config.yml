@@ -1,2 +1,10 @@
 blank_issues_enabled: false
+contact_links:
+  - name: 🧑‍💻 ReDantotsu Help on Discord
+    url: https://discord.gg/fYEJmDsDz9
+    about: Get support, ask questions, and join the community discussions.
+
+  - name: 📱 ReDantotsu Help on Telegram
+    url: https://t.me/redantotsu
+    about: Connect with the community, ask questions, and get help directly on Telegram.
 
