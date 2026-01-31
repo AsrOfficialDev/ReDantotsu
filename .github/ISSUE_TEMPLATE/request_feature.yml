@@ -48,7 +48,7 @@ body:
           required: true
         - label: I have provided a clear and descriptive title.
           required: true
-        - label: I am using the **[latest](https://github.com/rebelonion/Dantotsu/releases/latest)** version of Dantotsu. If not, I have provided a reason for using an older version.
+        - label: I am using the **[latest](https://github.com/AsrOfficialDev/ReDantotsu/releases/latest)** version of Dantotsu. If not, I have provided a reason for using an older version.
           required: true
         - label: I understand that not all feature requests will be accepted, and if declined, I won't resubmit the same request.
           required: true
