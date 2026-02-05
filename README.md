@@ -17,7 +17,7 @@
     <img src="https://img.shields.io/badge/License-UPL-blue?style=for-the-badge&logo=open-source-initiative&logoColor=white" alt="License: UPL">
   </a>
   <img src="https://img.shields.io/badge/Android-14%2B-green?style=for-the-badge&logo=android" alt="Android 14+">
-  <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FAsrOfficialDev%2FReDantotsu&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=Visits&edge_flat=false" alt="Hits">
+  <img src="https://komarev.com/ghpvc/?username=AsrOfficialDev-ReDantotsu&style=for-the-badge&label=Visits" alt="Visits">
 </p>
 
 > **🎨 Fan Remake of the original Dantotsu app with iOS 26-inspired Liquid Glass UI**
@@ -116,7 +116,7 @@ This project is licensed under the **Unabandon Public License (UPL)**, which ext
 
 > This is a derivative work of [Dantotsu](https://github.com/rebelonion/Dantotsu), licensed under GPLv3/UPL.
 
-## ⚠️ Disclaimer
+## ⚠️ Disclaimer <a name="disclaimer"></a>
 
 - ReDantotsu does not host any content. All streaming sources come from 3rd party extensions.
 - ReDantotsu is not affiliated with AniList, MyAnimeList, or any content providers.
