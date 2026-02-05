@@ -59,10 +59,17 @@ internal class ExtensionGithubApi {
             }
     }
 
+    private fun shouldFilter(pkgName: String): Boolean {
+        // TODO: Implement Regex filtering from preferences if needed
+        // Example: return PrefManager.getVal<Set<String>>(PrefName.FilteredPackages).any { it.toRegex().matches(pkgName) }
+        return false
+    }
+
     suspend fun findAnimeExtensions(): List<AnimeExtension.Available> {
         return withIOContext {
 
             val extensions: ArrayList<AnimeExtension.Available> = arrayListOf()
+            val seenPackages = mutableSetOf<String>()
 
             val repos =
                 PrefManager.getVal<Set<String>>(PrefName.AnimeExtensionRepos).toMutableList()
@@ -96,7 +103,18 @@ internal class ExtensionGithubApi {
                             .toAnimeExtensions(it)
                     }
 
-                    extensions.addAll(repoExtensions)
+                    val uniqueExtensions = repoExtensions.filter { ext ->
+                        val isNew = !seenPackages.contains(ext.pkgName)
+                        val isNotFiltered = !shouldFilter(ext.pkgName)
+                        if (isNew && isNotFiltered) {
+                            seenPackages.add(ext.pkgName)
+                            true
+                        } else {
+                            false
+                        }
+                    }
+
+                    extensions.addAll(uniqueExtensions)
                 } catch (e: Throwable) {
                     Logger.log("Failed to get extensions from GitHub")
                     Logger.log(e)
@@ -151,6 +169,7 @@ internal class ExtensionGithubApi {
         return withIOContext {
 
             val extensions: ArrayList<MangaExtension.Available> = arrayListOf()
+            val seenPackages = mutableSetOf<String>()
 
             val repos =
                 PrefManager.getVal<Set<String>>(PrefName.MangaExtensionRepos).toMutableList()
@@ -184,7 +203,18 @@ internal class ExtensionGithubApi {
                             .toMangaExtensions(it)
                     }
 
-                    extensions.addAll(repoExtensions)
+                    val uniqueExtensions = repoExtensions.filter { ext ->
+                        val isNew = !seenPackages.contains(ext.pkgName)
+                        val isNotFiltered = !shouldFilter(ext.pkgName)
+                        if (isNew && isNotFiltered) {
+                            seenPackages.add(ext.pkgName)
+                            true
+                        } else {
+                            false
+                        }
+                    }
+
+                    extensions.addAll(uniqueExtensions)
                 } catch (e: Throwable) {
                     Logger.log("Failed to get extensions from GitHub")
                     Logger.log(e)
@@ -203,6 +233,7 @@ internal class ExtensionGithubApi {
         return withIOContext {
 
             val extensions: ArrayList<NovelExtension.Available> = arrayListOf()
+            val seenPackages = mutableSetOf<String>()
 
             val repos =
                 PrefManager.getVal<Set<String>>(PrefName.NovelExtensionRepos).toMutableList()
@@ -236,7 +267,18 @@ internal class ExtensionGithubApi {
                             .toNovelExtensions(it)
                     }
 
-                    extensions.addAll(repoExtensions)
+                    val uniqueExtensions = repoExtensions.filter { ext ->
+                        val isNew = !seenPackages.contains(ext.pkgName)
+                        val isNotFiltered = !shouldFilter(ext.pkgName)
+                        if (isNew && isNotFiltered) {
+                            seenPackages.add(ext.pkgName)
+                            true
+                        } else {
+                            false
+                        }
+                    }
+
+                    extensions.addAll(uniqueExtensions)
                 } catch (e: Throwable) {
                     Logger.log("Failed to get extensions from GitHub")
                     Logger.log(e)
