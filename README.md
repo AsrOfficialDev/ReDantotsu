@@ -17,6 +17,7 @@
     <img src="https://img.shields.io/badge/License-UPL-blue?style=for-the-badge&logo=open-source-initiative&logoColor=white" alt="License: UPL">
   </a>
   <img src="https://img.shields.io/badge/Android-14%2B-green?style=for-the-badge&logo=android" alt="Android 14+">
+  <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FAsrOfficialDev%2FReDantotsu&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=Visits&edge_flat=false" alt="Hits">
 </p>
 
 > **🎨 Fan Remake of the original Dantotsu app with iOS 26-inspired Liquid Glass UI**
@@ -27,11 +28,11 @@ ReDantotsu is a premium remake of the beloved Dantotsu anime & manga app, featur
 - [What's New](#-whats-new-in-redantotsu)
 - [Screenshots](#-screenshots)
 - [Installation](#-installation)
-- [Building from Source](#-building-from-source)
+- [Building from Source](#building-from-source)
 - [Features](#-features)
-- [Credits](#-credits)
-- [License](#-license)
-- [Disclaimer](#-disclaimer)
+- [Credits](#credits)
+- [License](#license)
+- [Disclaimer](#disclaimer)
 - [Contributing](#-contributing)
 
 ## ✨ What's New in ReDantotsu
@@ -66,7 +67,7 @@ ReDantotsu is a premium remake of the beloved Dantotsu anime & manga app, featur
 2. Enable "Install from unknown sources" if prompted
 3. Install and enjoy!
 
-## 🛠️ Building from Source
+## 🛠️ Building from Source <a name="building-from-source"></a>
 
 ```bash
 # Clone the repository
@@ -92,7 +93,7 @@ cd ReDantotsu
 - **Auto-Skip** - Skip openings, endings, and recaps
 - **Timestamp Support** - Community-powered timestamps
 
-## 🏛️ Credits
+## 🏛️ Credits <a name="credits"></a>
 
 ### Original Project
 - **[Dantotsu](https://git.rebelonion.dev/rebelonion/Dantotsu)** by [rebelonion](https://github.com/rebelonion)
@@ -103,7 +104,7 @@ cd ReDantotsu
 - **Liquid Glass Effect:** Based on iOS 26 design language
 - **Backdrop Library:** [backdrop](https://github.com/kyant0/backdrop) by kyant0
 
-## 📜 License
+## 📜 License <a name="license"></a>
 
 This project is licensed under the **Unabandon Public License (UPL)**, which extends GPLv3.
 
