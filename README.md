@@ -2,10 +2,19 @@
 
 <p align="center">
   <a href="https://github.com/AsrOfficialDev/ReDantotsu/releases/latest">
-    <img src="https://img.shields.io/github/v/release/AsrOfficialDev/ReDantotsu?style=for-the-badge&logo=github&color=00bfff" alt="Latest Release">
+    <img src="https://img.shields.io/github/v/release/AsrOfficialDev/ReDantotsu?style=for-the-badge&logo=github&color=00bfff&label=Current%20Release" alt="Current Release">
+  </a>
+  <a href="https://github.com/AsrOfficialDev/ReDantotsu/releases">
+    <img src="https://img.shields.io/github/downloads/AsrOfficialDev/ReDantotsu/total?style=for-the-badge&logo=github&color=2ea44f&label=Total%20Downloads" alt="Total Downloads">
   </a>
   <a href="https://github.com/AsrOfficialDev/ReDantotsu/stargazers">
-    <img src="https://img.shields.io/github/stars/AsrOfficialDev/ReDantotsu?style=for-the-badge&logo=github&color=yellow" alt="Stars">
+    <img src="https://img.shields.io/github/stars/AsrOfficialDev/ReDantotsu?style=for-the-badge&logo=github&color=yellow&label=Stars" alt="Stars">
+  </a>
+  <a href="https://discord.gg/fYEJmDsDz9">
+    <img src="https://img.shields.io/badge/Discord-Join%20Us-7289da?style=for-the-badge&logo=discord&logoColor=white" alt="Discord">
+  </a>
+  <a href="./LICENSE">
+    <img src="https://img.shields.io/github/license/AsrOfficialDev/ReDantotsu?style=for-the-badge&color=blue" alt="License">
   </a>
   <img src="https://img.shields.io/badge/Android-14%2B-green?style=for-the-badge&logo=android" alt="Android 14+">
 </p>
@@ -13,6 +22,17 @@
 > **🎨 Fan Remake of the original Dantotsu app with iOS 26-inspired Liquid Glass UI**
 
 ReDantotsu is a premium remake of the beloved Dantotsu anime & manga app, featuring a stunning Liquid Glass visual overhaul that brings an iOS 26-inspired design language to Android.
+
+## 📋 Table of Contents
+- [What's New](#-whats-new-in-redantotsu)
+- [Screenshots](#-screenshots)
+- [Installation](#-installation)
+- [Building from Source](#-building-from-source)
+- [Features](#-features)
+- [Credits](#-credits)
+- [License](#-license)
+- [Disclaimer](#-disclaimer)
+- [Contributing](#-contributing)
 
 ## ✨ What's New in ReDantotsu
 
