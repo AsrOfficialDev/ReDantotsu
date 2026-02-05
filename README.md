@@ -13,8 +13,8 @@
   <a href="https://discord.gg/fYEJmDsDz9">
     <img src="https://img.shields.io/badge/Discord-Join%20Us-7289da?style=for-the-badge&logo=discord&logoColor=white" alt="Discord">
   </a>
-  <a href="./LICENSE">
-    <img src="https://img.shields.io/github/license/AsrOfficialDev/ReDantotsu?style=for-the-badge&color=blue" alt="License">
+  <a href="./LICENSE.md">
+    <img src="https://img.shields.io/badge/License-UPL-blue?style=for-the-badge&logo=open-source-initiative&logoColor=white" alt="License: UPL">
   </a>
   <img src="https://img.shields.io/badge/Android-14%2B-green?style=for-the-badge&logo=android" alt="Android 14+">
 </p>
