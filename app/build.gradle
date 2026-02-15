@@ -18,8 +18,8 @@ android {
         applicationId "app.redantotsu.asr"
         minSdk 23
         targetSdk 35
-        versionName "1.0.4"
-        versionCode 100000004
+        versionName "1.0.5"
+        versionCode 100000005
         signingConfig signingConfigs.debug
 
     }
@@ -197,11 +197,11 @@ dependencies {
     implementation 'ca.gosyer:voyager-navigator:1.0.0-rc07'
     implementation 'com.squareup.logcat:logcat:0.1'
     implementation 'uy.kohesive.injekt:injekt-core:1.16.+'
-    implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.12'
-    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.12'
-    implementation 'com.squareup.okhttp3:okhttp-dnsoverhttps'
+    implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.14'
+    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.14'
+    implementation 'com.squareup.okhttp3:okhttp-dnsoverhttps:5.0.0-alpha.14'
     implementation 'com.squareup.okio:okio:3.8.0'
-    implementation 'com.squareup.okhttp3:okhttp-brotli:5.0.0-alpha.12'
+    implementation 'com.squareup.okhttp3:okhttp-brotli:5.0.0-alpha.14'
     implementation 'org.jsoup:jsoup:1.16.1'
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json-okio:1.6.3'
     implementation 'com.jakewharton.rxrelay:rxrelay:1.2.0'
