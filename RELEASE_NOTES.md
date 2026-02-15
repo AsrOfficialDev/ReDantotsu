@@ -1,14 +1,12 @@
 # 🎉 ReDantotsu v1.0.5
 
-This release focuses on improving build stability and aligning terminal-based environment configurations for a smoother development and release workflow.
+This is a minor update focusing on internal maintenance and overall app stability.
 
 ## ✨ New Features & Fixes
-* **Build Stability** – Increased Gradle and Kotlin daemon memory allocation to 4GB, effectively preventing OutOfMemory (OOM) errors during resource-intensive compilation and dexing phases.
-* **Release Consistency** – Synchronized versioning to v1.0.5 across both Google and F-Droid flavors for better tracking.
+* **General Stability** – Improved internal build processes and resource management for a smoother experience.
 
 ## 🔧 Internal Changes
-* **Memory Optimization** – Refined JVM arguments in `gradle.properties` to better manage native memory usage during builds.
-* **Environment Fix** – Resolved `JAVA_HOME` discrepancies to ensure build tools point to compatible JDK 17 installations.
+* **Maintenance** – Optimized developer configuration and build stability.
 
 ---
 
