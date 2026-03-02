@@ -20,12 +20,12 @@
   <img src="https://komarev.com/ghpvc/?username=AsrOfficialDev-ReDantotsu&style=for-the-badge&label=Visits" alt="Visits">
 </p>
 
-> **🎨 Fan Remake of the original Dantotsu app with iOS 26-inspired Liquid Glass UI**
+> **✨ The Ultimate Anime & Manga Experience for Android**
 
-ReDantotsu is a premium remake of the beloved Dantotsu anime & manga app, featuring a stunning Liquid Glass visual overhaul that brings an iOS 26-inspired design language to Android.
+ReDantotsu is a premium fan remake of the beloved Dantotsu application. I've taken the robust foundation of the original app and completely reimagined it, introducing a modern UI, expanding core functionality, and implementing crucial stability fixes to deliver the definitive anime and manga tracking experience.
 
 ## 📋 Table of Contents
-- [What's New](#-whats-new-in-redantotsu)
+- [What's New in ReDantotsu](#-whats-new-in-redantotsu)
 - [Screenshots](#-screenshots)
 - [Installation](#-installation)
 - [Building from Source](#building-from-source)
@@ -37,23 +37,22 @@ ReDantotsu is a premium remake of the beloved Dantotsu anime & manga app, featur
 
 ## ✨ What's New in ReDantotsu
 
-### 🌟 Liquid Glass Theme
-- **Real-time backdrop blur effects** - Glass surfaces that blur the content behind them
-- **Dynamic lens distortion** - Subtle liquid-like refraction effects
-- **Smooth 60fps animations** - Optimized spring animations and reduced GPU load
-- **Premium pill-shaped bottom bars** - Consistent semi-transparent design across all screens
+We've extensively upgraded the app far beyond a simple visual reskin. Here is what makes ReDantotsu the best version yet:
 
-### 🎯 UI Improvements
-- **Glass Settings Overlay** - Beautiful slide-up settings panel with glass effect
-- **Redesigned bottom navigation** - Modern pill-shaped navigation with smooth tab switching
-- **Consistent dark/light themes** - Proper theming across all glass components
-- **Optimized performance** - 60fps animations with reduced blur radii
-- **MyAnimeList rating** - Added support for MyAnimeList ratings
+### 🌟 Brand New Features
+- **Expanded Home Experience** - A redesigned home screen featuring dedicated Anime and Manga sections for better content discovery.
+- **Source Deduplication** - Intelligent handling of extensions to eliminate duplicate entries and streamline your library.
+- **Enhanced Integration** - Upgraded and fully stable AniList login utilizing modern dashboard redirect URIs, alongside MyAnimeList rating support.
 
-### 🔧 Technical Improvements
-- **Fixed loading glitches** - Proper fragment lifecycle management in Compose
-- **Better memory management** - Optimized recomposition with derived state
-- **Hardware-accelerated effects** - Leverages GPU for glass effects
+### 🎨 Premium UI Overhaul (Liquid Glass)
+- **Real-time Backdrop Blur** - Beautiful glass surfaces that dynamically blur content behind them for an iOS-inspired aesthetic.
+- **Redesigned Navigation** - Modern pill-shaped bottom bars and a stunning sliding glass settings overlay.
+- **Fluid Animations** - Smooth 60fps spring animations with subtle lens distortion and optimized GPU load.
+- **Polished Visuals** - Consistent dark/light theming, flawless profile picture rendering, and improved layout consistency.
+
+### 🔧 Core Fixes & Optimizations
+- **Stable Core Systems** - Fixed the in-app update checker and resolved complex fragment lifecycle glitches present in the original app.
+- **Optimized Performance** - Better memory management using derived state recomposition, allowing for a faster and smoother browsing experience.
 
 ## 📸 Screenshots
 
@@ -63,8 +62,8 @@ ReDantotsu is a premium remake of the beloved Dantotsu anime & manga app, featur
 
 ## 📥 Installation
 
-1. Download the latest APK from [Releases](https://github.com/AsrOfficialDev/ReDantotsu/releases)
-2. Enable "Install from unknown sources" if prompted
+1. Download the latest APK from the [Releases](https://github.com/AsrOfficialDev/ReDantotsu/releases) page.
+2. Enable "Install from unknown sources" if prompted by your device.
 3. Install and enjoy!
 
 ## 🛠️ Building from Source <a name="building-from-source"></a>
@@ -83,15 +82,13 @@ cd ReDantotsu
 
 ## 🎯 Features
 
-- **Stream & Download Anime** - Through 3rd party extensions
-- **Read Manga** - With built-in reader supporting multiple layouts
-- **AniList Sync** - Real-time synchronization with your AniList account
-- **MAL Sync** - Optional MyAnimeList integration
-- **Discord Rich Presence** - Show what you're watching/reading
-- **Extension System** - Modular source system
-- **Offline Mode** - Download content for offline viewing
-- **Auto-Skip** - Skip openings, endings, and recaps
-- **Timestamp Support** - Community-powered timestamps
+- **AniList Sync** - Real-time synchronization with your AniList account.
+- **MAL Sync** - Optional MyAnimeList integration for ratings.
+- **Discord Rich Presence** - Show off what you're currently watching or reading to your friends.
+- **Extension System** - Modular source system for unlimited content discovery.
+- **Offline Mode** - Download content for offline viewing.
+- **Auto-Skip** - Automatically skip openings, endings, and recaps.
+- **Timestamp Support** - Community-powered timestamps.
 
 ## 🏛️ Credits <a name="credits"></a>
 
@@ -136,5 +133,5 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ---
 
 <p align="center">
-  <b>ReDantotsu</b> • Fan Remake with ❤️ and Liquid Glass ✨
+  <b>ReDantotsu</b> • A Premium Anime & Manga Client ✨
 </p>
