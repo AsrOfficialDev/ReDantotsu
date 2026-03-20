@@ -58,7 +58,7 @@ class ProfileFragment : Fragment() {
 
         binding.root.setBaseline(activity.navBar)
 
-        user = arguments?.getSerializableCompat<Query.UserProfile>("user") as Query.UserProfile
+        user = model.userProfile!!
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
             model.setData(user.id)
         }
@@ -209,13 +209,8 @@ class ProfileFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(query: Query.UserProfile): ProfileFragment {
-            val args = Bundle().apply {
-                putSerializable("user", query)
-            }
-            return ProfileFragment().apply {
-                arguments = args
-            }
+        fun newInstance(): ProfileFragment {
+            return ProfileFragment()
         }
     }
 

@@ -145,6 +145,20 @@ class ReaderSettingsDialogFragment : BottomSheetDialogFragment() {
             activity.applySettings()
         }
 
+        binding.readerAutoScroll.isChecked = settings.autoScroll
+        binding.readerAutoScroll.setOnCheckedChangeListener { _, isChecked ->
+            settings.autoScroll = isChecked
+            activity.applySettings()
+        }
+
+        binding.readerAutoScrollSpeed.value = settings.autoScrollSpeed
+        binding.readerAutoScrollSpeed.addOnChangeListener { _, value, fromUser ->
+            if (fromUser) {
+                settings.autoScrollSpeed = value
+                activity.applySettings()
+            }
+        }
+
         binding.readerVolumeButton.isChecked = settings.volumeButtons
         binding.readerVolumeButton.setOnCheckedChangeListener { _, isChecked ->
             settings.volumeButtons = isChecked

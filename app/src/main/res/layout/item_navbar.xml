@@ -10,7 +10,8 @@
     android:clipToPadding="false"
     android:paddingStart="24dp"
     android:paddingEnd="24dp"
-    android:paddingBottom="16dp">
+    android:paddingBottom="16dp"
+    android:visibility="gone">
 
     <!-- Simple pill-shaped container without blur -->
     <FrameLayout
@@ -28,7 +29,7 @@
             android:layout_gravity="center"
             android:background="@android:color/transparent"
             app:menu="@menu/bottom_navbar_menu"
-            app:labelVisibilityMode="labeled"
+            app:labelVisibilityMode="unlabeled"
             app:itemIconTint="@color/tab_layout_icon"
             app:itemTextColor="@color/tab_layout_icon"
             app:itemActiveIndicatorStyle="@null" />

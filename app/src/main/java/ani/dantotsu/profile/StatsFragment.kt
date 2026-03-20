@@ -26,6 +26,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Locale
+import androidx.fragment.app.activityViewModels
+import ani.dantotsu.connections.anilist.ProfileViewModel
 
 class StatsFragment :
     Fragment() {
@@ -37,6 +39,7 @@ class StatsFragment :
     private lateinit var user: Query.UserProfile
     private lateinit var activity: ProfileActivity
     private var loadedFirstTime = false
+    private val model: ProfileViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,7 +54,7 @@ class StatsFragment :
         super.onViewCreated(view, savedInstanceState)
         activity = requireActivity() as ProfileActivity
 
-        user = arguments?.getSerializableCompat<Query.UserProfile>("user") as Query.UserProfile
+        user = model.userProfile!!
 
         binding.statisticList.setBaseline(activity.navBar)
 
@@ -763,13 +766,8 @@ class StatsFragment :
     }
 
     companion object {
-        fun newInstance(user: Query.UserProfile): StatsFragment {
-            val args = Bundle().apply {
-                putSerializable("user", user)
-            }
-            return StatsFragment().apply {
-                arguments = args
-            }
+        fun newInstance(): StatsFragment {
+            return StatsFragment()
         }
     }
 }

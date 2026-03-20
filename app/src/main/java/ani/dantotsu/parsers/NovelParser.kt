@@ -48,11 +48,19 @@ abstract class NovelParser : BaseParser() {
     }
 }
 
+data class BookChapter(
+    val name: String,
+    val link: String,
+    val number: Float = -1f,
+    val scanlator: String? = null
+) : java.io.Serializable
+
 data class Book(
     val name: String,
     val img: FileUrl,
     val description: String? = null,
-    val links: List<FileUrl>
+    val links: List<FileUrl>,
+    val chapters: List<BookChapter> = emptyList()
 ) {
     constructor (
         name: String,
@@ -63,6 +71,21 @@ data class Book(
         name,
         FileUrl(img),
         description,
-        links.map { FileUrl(it) }
+        links.map { FileUrl(it) },
+        emptyList()
+    )
+
+    constructor (
+        name: String,
+        img: String,
+        description: String? = null,
+        links: List<String>,
+        chapters: List<BookChapter>
+    ) : this(
+        name,
+        FileUrl(img),
+        description,
+        links.map { FileUrl(it) },
+        chapters
     )
 }

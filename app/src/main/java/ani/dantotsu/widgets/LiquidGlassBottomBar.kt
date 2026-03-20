@@ -276,10 +276,10 @@ class LiquidGlassBottomBar @JvmOverloads constructor(
         val backdrop = rememberLayerBackdrop()
         val coroutineScope = rememberCoroutineScope()
         
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(modifier = Modifier.fillMaxWidth()) {
             Box(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .matchParentSize()
                     .layerBackdrop(backdrop)
             )
             
@@ -325,7 +325,7 @@ class LiquidGlassBottomBar @JvmOverloads constructor(
         
         Box(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .padding(horizontal = 24.dp, vertical = 16.dp),
             contentAlignment = Alignment.BottomCenter
         ) {

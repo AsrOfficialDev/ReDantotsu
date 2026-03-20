@@ -12,6 +12,14 @@ import eu.kanade.tachiyomi.extension.util.ExtensionInstaller
 import eu.kanade.tachiyomi.extension.util.ExtensionLoader
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.launch
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import rx.Observable
 import tachiyomi.core.util.lang.withUIContext
 
@@ -32,9 +40,30 @@ class NovelExtensionManager(private val context: Context) {
 
     private val iconMap = mutableMapOf<String, Drawable>()
 
+    private val lnReaderPluginManager: ani.dantotsu.parsers.novel.lnreader.LnReaderPluginManager = Injekt.get()
+
     private val _installedNovelExtensionsFlow =
         MutableStateFlow(emptyList<NovelExtension.Installed>())
-    val installedExtensionsFlow = _installedNovelExtensionsFlow.asStateFlow()
+    
+    val installedExtensionsFlow = combine(
+        _installedNovelExtensionsFlow,
+        lnReaderPluginManager.installedPlugins
+    ) { apkExts, lnPlugins ->
+        val mappedLnPlugins = lnPlugins.map { plugin ->
+            NovelExtension.Installed(
+                name = plugin.name,
+                pkgName = "lnreader.plugin.${plugin.id}",
+                versionName = plugin.version,
+                versionCode = 1,
+                sources = emptyList(),
+                icon = null,
+                hasUpdate = false,
+                isObsolete = false,
+                isUnofficial = false
+            )
+        }
+        apkExts + mappedLnPlugins
+    }.stateIn(CoroutineScope(Dispatchers.IO), SharingStarted.Eagerly, emptyList())
 
     private val _availableNovelExtensionsFlow =
         MutableStateFlow(emptyList<NovelExtension.Available>())
@@ -120,6 +149,30 @@ class NovelExtensionManager(private val context: Context) {
      * @param extension The anime extension to be installed.
      */
     fun installExtension(extension: NovelExtension.Available): Observable<InstallStep> {
+        if (extension.pkgName.startsWith("lnreader.plugin.")) {
+            // Reconstruct the plugin for LnReaderPluginManager
+            val plugin = ani.dantotsu.parsers.novel.lnreader.LnReaderPlugin(
+                id = extension.pkgName.removePrefix("lnreader.plugin."),
+                name = extension.name,
+                site = "",
+                lang = "all", // hardcode since Available doesn't have lang
+                version = extension.versionName,
+                url = extension.apkName ?: "", // We sneaked the JS url into apkName
+                iconUrl = extension.iconUrl
+            )
+            return Observable.create { subscriber ->
+                subscriber.onNext(InstallStep.Downloading)
+                CoroutineScope(Dispatchers.IO).launch {
+                    val success = lnReaderPluginManager.installPlugin(plugin)
+                    if (success) {
+                        subscriber.onNext(InstallStep.Installed)
+                    } else {
+                        subscriber.onNext(InstallStep.Error)
+                    }
+                    subscriber.onCompleted()
+                }
+            }
+        }
         return installer.downloadAndInstall(
             api.getNovelApkUrl(extension), extension.pkgName,
             extension.name, MediaType.NOVEL
@@ -163,6 +216,14 @@ class NovelExtensionManager(private val context: Context) {
      * @param pkgName The package name of the application to uninstall.
      */
     fun uninstallExtension(pkgName: String) {
+        if (pkgName.startsWith("lnreader.plugin.")) {
+            val id = pkgName.removePrefix("lnreader.plugin.")
+            val plugin = lnReaderPluginManager.installedPlugins.value.find { it.id == id }
+            if (plugin != null) {
+                lnReaderPluginManager.uninstallPlugin(plugin)
+            }
+            return
+        }
         installer.uninstallApk(pkgName)
     }
 

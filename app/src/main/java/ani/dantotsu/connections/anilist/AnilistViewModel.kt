@@ -20,6 +20,7 @@ import ani.dantotsu.tryWithSuspend
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import ani.dantotsu.connections.anilist.api.Query
 
 suspend fun getUserId(context: Context, block: () -> Unit) {
     if (!Anilist.initialized && PrefManager.getVal<String>(PrefName.AnilistToken) != "") {
@@ -582,6 +583,8 @@ class ProfileViewModel : ViewModel() {
         MutableLiveData<ArrayList<Media>>(null)
 
     fun getAnimeFav(): LiveData<ArrayList<Media>> = animeFav
+
+    var userProfile: Query.UserProfile? = null
 
     suspend fun setData(id: Int) {
         val res = Anilist.query.initProfilePage(id)

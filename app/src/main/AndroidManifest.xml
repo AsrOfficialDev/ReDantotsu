@@ -129,6 +129,10 @@
                 <data android:scheme="file" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".media.novel.novelreader.NovelTextReaderActivity"
+            android:configChanges="orientation|screenSize"
+            android:exported="false" />
         <activity android:name=".others.calc.CalcActivity"
             android:parentActivityName=".MainActivity" />
         <activity android:name=".settings.AnilistSettingsActivity"/>

@@ -220,7 +220,7 @@ class MainActivity : AppCompatActivity() {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
                 val splash = SplashScreenBinding.inflate(layoutInflater)
                 binding.root.addView(splash.root)
-                (splash.splashImage.drawable as Animatable).start()
+                (splash.splashImage.drawable as? Animatable)?.start()
 
                 delay(1200)
 

@@ -45,9 +45,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ani.dantotsu.widgets.LiquidGlassBottomBar
 import kotlin.math.abs
+import androidx.activity.viewModels
+import ani.dantotsu.connections.anilist.ProfileViewModel
 
 
 class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener {
+    private val model: ProfileViewModel by viewModels()
     lateinit var binding: ActivityProfileBinding
     private lateinit var bindingProfileAppBar: ItemProfileAppBarBinding
     private var selected: Int = 0
@@ -98,8 +101,9 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                 binding.profileViewPager.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                     bottomMargin = navBarHeight
                 }
+                model.userProfile = user
                 binding.profileViewPager.adapter =
-                    ViewPagerAdapter(supportFragmentManager, lifecycle, user)
+                    ViewPagerAdapter(supportFragmentManager, lifecycle, user.id)
                 binding.profileViewPager.setOffscreenPageLimit(3)
                 binding.profileViewPager.setCurrentItem(selected, false)
                 navBar.visibility = View.VISIBLE
@@ -118,6 +122,12 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
 
                 bindingProfileAppBar = ItemProfileAppBarBinding.bind(binding.root).apply {
                     binding.profileProgressBar.visibility = View.GONE
+                    
+                    profileAppBar.visibility = View.VISIBLE
+                    binding.root.post {
+                        binding.root.requestLayout()
+                        binding.profileViewPager.requestLayout()
+                    }
                     followButton.isGone =
                         user.id == Anilist.userid || Anilist.userid == null
 
@@ -332,16 +342,16 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
     private class ViewPagerAdapter(
         fragmentManager: FragmentManager,
         lifecycle: Lifecycle,
-        private val user: Query.UserProfile
+        private val userId: Int
     ) :
         FragmentStateAdapter(fragmentManager, lifecycle) {
 
         override fun getItemCount(): Int = 3
         override fun createFragment(position: Int): Fragment = when (position) {
-            0 -> ProfileFragment.newInstance(user)
-            1 -> ActivityFragment.newInstance(ActivityType.OTHER_USER, user.id)
-            2 -> StatsFragment.newInstance(user)
-            else -> ProfileFragment.newInstance(user)
+            0 -> ProfileFragment.newInstance()
+            1 -> ActivityFragment.newInstance(ActivityType.OTHER_USER, userId)
+            2 -> StatsFragment.newInstance()
+            else -> ProfileFragment.newInstance()
         }
     }
 }

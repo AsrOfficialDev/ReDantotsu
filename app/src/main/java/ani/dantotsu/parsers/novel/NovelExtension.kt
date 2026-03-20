@@ -29,6 +29,7 @@ sealed class NovelExtension {
         var repository: String,
         val sources: List<AvailableNovelSources>,
         val iconUrl: String,
+        val apkName: String? = null
     ) : NovelExtension()
 }
 

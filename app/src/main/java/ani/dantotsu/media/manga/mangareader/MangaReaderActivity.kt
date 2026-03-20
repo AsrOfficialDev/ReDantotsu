@@ -88,6 +88,9 @@ import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -129,6 +132,10 @@ class MangaReaderActivity : AppCompatActivity() {
     var sliding = false
     var isAnimating = false
 
+    // Auto-scroll
+    private var autoScrollJob: Job? = null
+    private var isUserScrolling = false
+
     private val directionRLBT
         get() = defaultSettings.direction == RIGHT_TO_LEFT
                 || defaultSettings.direction == BOTTOM_TO_TOP
@@ -166,6 +173,7 @@ class MangaReaderActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
+        stopAutoScroll()
         mangaCache.clear()
         if (DiscordServiceRunningSingleton.running) {
             DiscordServiceRunningSingleton.running = false
@@ -700,6 +708,11 @@ class MangaReaderActivity : AppCompatActivity() {
                 manager.setStackFromEnd(defaultSettings.direction == BOTTOM_TO_TOP)
 
                 addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                        isUserScrolling = newState == RecyclerView.SCROLL_STATE_DRAGGING
+                        super.onScrollStateChanged(recyclerView, newState)
+                    }
+
                     override fun onScrolled(v: RecyclerView, dx: Int, dy: Int) {
                         defaultSettings.apply {
                             if (
@@ -770,7 +783,45 @@ class MangaReaderActivity : AppCompatActivity() {
                 binding.mangaReaderPager.currentItem += 1
             }
         }
+        // Start or stop auto-scroll whenever settings are applied
+        startAutoScroll()
     }
+
+    // ── Auto-scroll ──────────────────────────────────────────────────────────
+
+    /** Starts or restarts the auto-scroll coroutine based on current settings. */
+    fun startAutoScroll() {
+        stopAutoScroll()
+        if (!defaultSettings.autoScroll) return
+        val isVertical = defaultSettings.direction ==
+                ani.dantotsu.settings.CurrentReaderSettings.Directions.TOP_TO_BOTTOM ||
+                defaultSettings.direction ==
+                ani.dantotsu.settings.CurrentReaderSettings.Directions.BOTTOM_TO_TOP
+        val isReverse = defaultSettings.direction ==
+                ani.dantotsu.settings.CurrentReaderSettings.Directions.BOTTOM_TO_TOP ||
+                defaultSettings.direction ==
+                ani.dantotsu.settings.CurrentReaderSettings.Directions.RIGHT_TO_LEFT
+        // px per frame (targeting ~60fps = 16ms delay). Speed 1.0 ≈ 2 px/frame.
+        val pxPerFrame = (defaultSettings.autoScrollSpeed * 2f).toInt().coerceAtLeast(1)
+        autoScrollJob = scope.launch(Dispatchers.Main) {
+            while (isActive) {
+                if (!isUserScrolling) {
+                    val dx = if (isVertical) 0 else if (isReverse) -pxPerFrame else pxPerFrame
+                    val dy = if (!isVertical) 0 else if (isReverse) -pxPerFrame else pxPerFrame
+                    binding.mangaReaderRecycler.scrollBy(dx, dy)
+                }
+                delay(16L)
+            }
+        }
+    }
+
+    /** Cancels the auto-scroll coroutine. */
+    fun stopAutoScroll() {
+        autoScrollJob?.cancel()
+        autoScrollJob = null
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
 
     private var onVolumeUp: (() -> Unit)? = null
     private var onVolumeDown: (() -> Unit)? = null

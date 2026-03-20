@@ -16,6 +16,8 @@ import eu.kanade.tachiyomi.network.awaitSuccess
 import eu.kanade.tachiyomi.network.parseAs
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import org.json.JSONArray
+import org.json.JSONObject
 import tachiyomi.core.util.lang.withIOContext
 import uy.kohesive.injekt.injectLazy
 
@@ -239,7 +241,7 @@ internal class ExtensionGithubApi {
                 PrefManager.getVal<Set<String>>(PrefName.NovelExtensionRepos).toMutableList()
 
             repos.forEach {
-                val repoUrl = if (it.contains("index.min.json")) {
+                val repoUrl = if (it.contains("index.min.json") || it.contains("plugins.min.json")) {
                     it
                 } else {
                     "$it${if (it.endsWith('/')) "" else "/"}index.min.json"
@@ -256,29 +258,71 @@ internal class ExtensionGithubApi {
                     }
 
                     val response = githubResponse ?: run {
+                        val fallback = fallbackRepoUrl(it)
+                        val url = if (it.contains("plugins.min.json")) {
+                            "$fallback/plugins.min.json"
+                        } else {
+                            "$fallback/index.min.json"
+                        }
                         networkService.client
-                            .newCall(GET(fallbackRepoUrl(it) + "/index.min.json"))
+                            .newCall(GET(url))
                             .awaitSuccess()
                     }
 
-                    val repoExtensions = with(json) {
-                        response
-                            .parseAs<List<ExtensionJsonObject>>()
-                            .toNovelExtensions(it)
+                    val responseBody = response.body?.string() ?: ""
+                    var parsedStandard = false
+                    
+                    try {
+                        val repoExtensions = json.decodeFromString<List<ExtensionJsonObject>>(responseBody).toNovelExtensions(it)
+                        val uniqueExtensions = repoExtensions.filter { ext ->
+                            val isNew = !seenPackages.contains(ext.pkgName)
+                            val isNotFiltered = !shouldFilter(ext.pkgName)
+                            if (isNew && isNotFiltered) {
+                                seenPackages.add(ext.pkgName)
+                                true
+                            } else {
+                                false
+                            }
+                        }
+                        extensions.addAll(uniqueExtensions)
+                        parsedStandard = true
+                    } catch (e: Exception) {
+                        // ignore standard parse error
                     }
-
-                    val uniqueExtensions = repoExtensions.filter { ext ->
-                        val isNew = !seenPackages.contains(ext.pkgName)
-                        val isNotFiltered = !shouldFilter(ext.pkgName)
-                        if (isNew && isNotFiltered) {
-                            seenPackages.add(ext.pkgName)
-                            true
-                        } else {
-                            false
+                    
+                    if (!parsedStandard) {
+                        try {
+                            val arr = JSONArray(responseBody)
+                            for (i in 0 until arr.length()) {
+                                val obj = arr.getJSONObject(i)
+                                val pluginId = obj.getString("id")
+                                val pkgName = "lnreader.plugin.$pluginId"
+                                
+                                if (!seenPackages.contains(pkgName)) {
+                                    seenPackages.add(pkgName)
+                                    val iconUrl = obj.optString("iconUrl", "")
+                                    val urlForPlugin = obj.getString("url")
+                                    val fallbackIcon = if (iconUrl.isNotBlank()) iconUrl else "https://raw.githubusercontent.com/LNReader/lnreader-plugins/plugins/v3.0.0/.dist/icon/default.png"
+                                    
+                                    extensions.add(
+                                        NovelExtension.Available(
+                                            name = obj.getString("name"),
+                                            pkgName = pkgName,
+                                            versionName = obj.getString("version"),
+                                            versionCode = 1,
+                                            repository = it,
+                                            sources = emptyList(),
+                                            iconUrl = fallbackIcon,
+                                            apkName = urlForPlugin
+                                        )
+                                    )
+                                }
+                            }
+                        } catch (e2: Exception) {
+                            Logger.log("Failed to parse $it as either standard or LNReader repo")
+                            Logger.log(e2)
                         }
                     }
-
-                    extensions.addAll(uniqueExtensions)
                 } catch (e: Throwable) {
                     Logger.log("Failed to get extensions from GitHub")
                     Logger.log(e)
@@ -334,6 +378,7 @@ internal class ExtensionGithubApi {
             .removePrefix("http://")
             .removeSuffix("/")
             .removeSuffix("/index.min.json")
+            .removeSuffix("/plugins.min.json")
         val repoUrlParts = strippedRepoUrl.split("/")
         if (repoUrlParts.size < 3) {
             return null

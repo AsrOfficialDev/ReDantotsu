@@ -124,6 +124,41 @@ abstract class NovelReadSources : BaseSources() {
         }
     }
 
+    suspend fun loadChaptersFromMedia(i: Int, media: Media): MutableMap<String, MangaChapter> {
+        return tryWithSuspend(true) {
+            val res = get(i)?.autoSearch(media) ?: return@tryWithSuspend mutableMapOf()
+            loadChapters(i, res)
+        } ?: mutableMapOf()
+    }
+
+    suspend fun loadChapters(i: Int, show: ShowResponse): MutableMap<String, MangaChapter> {
+        val map = mutableMapOf<String, MangaChapter>()
+        val parser = get(i) ?: return map
+        
+        tryWithSuspend(true) {
+            val book = parser.loadBook(show.link, show.extra)
+            book.chapters.forEach { bookChapter ->
+                val sChap = eu.kanade.tachiyomi.source.model.SChapter.create().apply {
+                    name = bookChapter.name
+                    url = bookChapter.link
+                    chapter_number = bookChapter.number
+                }
+
+                val mangaChapter = MangaChapter(
+                    number = bookChapter.name,
+                    link = bookChapter.link,
+                    title = bookChapter.name,
+                    description = null,
+                    sChapter = sChap,
+                    scanlator = bookChapter.scanlator ?: get(i)?.name,
+                    date = 0L,
+                    progress = ""
+                )
+                map["${mangaChapter.number}-${mangaChapter.scanlator}"] = mangaChapter
+            }
+        }
+        return map
+    }
 }
 
 class EmptyNovelParser : NovelParser() {

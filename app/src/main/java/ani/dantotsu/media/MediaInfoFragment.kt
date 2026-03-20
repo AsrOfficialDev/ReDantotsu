@@ -335,8 +335,25 @@ class MediaInfoFragment : Fragment() {
                         visibility = View.VISIBLE
                         settings.javaScriptEnabled = true
                         isSoundEffectsEnabled = true
+                        settings.userAgentString = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36"
                         webChromeClient = MyChrome()
-                        loadUrl(media.trailer!!)
+                        val videoId = media.trailer?.substringAfterLast("/")?.substringAfterLast("=")?.substringBefore("&") ?: ""
+                        val html = """
+                            <!DOCTYPE html>
+                            <html>
+                            <head>
+                                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                                <style>
+                                    body { margin: 0; padding: 0; background-color: #000; display: flex; align-items: center; justify-content: center; height: 100vh; overflow: hidden; }
+                                    iframe { width: 100vw; height: 100vh; border: none; }
+                                </style>
+                            </head>
+                            <body>
+                                <iframe src="https://www.youtube.com/embed/$videoId?autoplay=0&playsinline=1" frameborder="0" allowfullscreen></iframe>
+                            </body>
+                            </html>
+                        """.trimIndent()
+                        loadDataWithBaseURL("https://google.com/", html, "text/html", "utf-8", "https://google.com/")
                     }
                     parent.addView(bind.root)
                 }

@@ -23,7 +23,9 @@ data class CurrentReaderSettings(
     var wrapImages: Boolean = PrefManager.getVal(PrefName.WrapImages),
     var longClickImage: Boolean = PrefManager.getVal(PrefName.LongClickImage),
     var cropBorders: Boolean = PrefManager.getVal(PrefName.CropBorders),
-    var cropBorderThreshold: Int = PrefManager.getVal(PrefName.CropBorderThreshold)
+    var cropBorderThreshold: Int = PrefManager.getVal(PrefName.CropBorderThreshold),
+    var autoScroll: Boolean = false,
+    var autoScrollSpeed: Float = 1.0f
 ) : Serializable {
 
     enum class Directions {

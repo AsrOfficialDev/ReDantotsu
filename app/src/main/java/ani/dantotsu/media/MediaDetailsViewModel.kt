@@ -347,4 +347,29 @@ class MediaDetailsViewModel : ViewModel() {
         }
     }
 
+    private val novelChapters =
+        MutableLiveData<MutableMap<Int, MutableMap<String, MangaChapter>>>(null)
+    private val novelLoaded = mutableMapOf<Int, MutableMap<String, MangaChapter>>()
+    fun getNovelChapters(): LiveData<MutableMap<Int, MutableMap<String, MangaChapter>>> =
+        novelChapters
+
+    suspend fun loadNovelChapters(media: Media, i: Int, invalidate: Boolean = false) {
+        Logger.log("Loading Novel Chapters : $novelLoaded")
+        if (!novelLoaded.containsKey(i) || invalidate) tryWithSuspend {
+            novelLoaded[i] =
+                novelSources.loadChaptersFromMedia(i, media)
+        }
+        novelChapters.postValue(novelLoaded)
+    }
+
+    suspend fun overrideNovelChapters(i: Int, source: ShowResponse, id: Int) {
+        novelSources.saveResponse(i, id, source)
+        tryWithSuspend {
+            novelLoaded[i] = novelSources.loadChapters(i, source)
+        }
+        novelChapters.postValue(novelLoaded)
+    }
+
+    private val novelChapter = MutableLiveData<MangaChapter?>(null)
+    fun getNovelChapter(): LiveData<MangaChapter?> = novelChapter
 }

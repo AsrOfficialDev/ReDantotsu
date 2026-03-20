@@ -47,6 +47,8 @@ class App : MultiDexApplication() {
     private lateinit var animeExtensionManager: AnimeExtensionManager
     private lateinit var mangaExtensionManager: MangaExtensionManager
     private lateinit var novelExtensionManager: NovelExtensionManager
+    private lateinit var lnReaderPluginManager: ani.dantotsu.parsers.novel.lnreader.LnReaderPluginManager
+    private lateinit var lnReaderJsExecutor: ani.dantotsu.parsers.novel.lnreader.LnReaderJsExecutor
     private lateinit var torrentAddonManager: TorrentAddonManager
     private lateinit var downloadAddonManager: DownloadAddonManager
 
@@ -127,9 +129,19 @@ class App : MultiDexApplication() {
         }
         CoroutineScope(Dispatchers.IO).launch {
             novelExtensionManager = Injekt.get()
+            lnReaderPluginManager = Injekt.get()
+            lnReaderJsExecutor = Injekt.get()
+            
             novelExtensionManager.findAvailableExtensions()
+            lnReaderPluginManager.fetchAvailablePlugins()
+            
             Logger.log("Novel Extensions: ${novelExtensionManager.installedExtensionsFlow.first()}")
-            NovelSources.init(novelExtensionManager.installedExtensionsFlow)
+            NovelSources.init(
+                novelExtensionManager.installedExtensionsFlow,
+                lnReaderPluginManager.installedPlugins,
+                lnReaderPluginManager,
+                lnReaderJsExecutor
+            )
         }
         GlobalScope.launch {
             torrentAddonManager = Injekt.get()

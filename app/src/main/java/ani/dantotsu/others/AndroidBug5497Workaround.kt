@@ -24,15 +24,22 @@ class AndroidBug5497Workaround private constructor(
         val usableHeightNow = computeUsableHeight()
         if (usableHeightNow != usableHeightPrevious) {
             val usableHeightSansKeyboard = mChildOfContent.rootView.height
+            // Fix for Tablets/Big Screens: Prevent zero-height layouts throwing the view tree into an infinite loop or clipping
+            if (usableHeightSansKeyboard <= 0 || usableHeightNow <= 0) return
+            
             val heightDifference = usableHeightSansKeyboard - usableHeightNow
             if (heightDifference > usableHeightSansKeyboard / 4) {
                 // keyboard probably just became visible
                 callback.invoke(true)
                 frameLayoutParams.height = usableHeightSansKeyboard - heightDifference
             } else {
-                // keyboard probably just became hidden
+                // keyboard probably just became hidden.
                 callback.invoke(false)
-                frameLayoutParams.height = usableHeightSansKeyboard
+                if (usableHeightSansKeyboard > 0) {
+                    frameLayoutParams.height = usableHeightSansKeyboard
+                } else {
+                    frameLayoutParams.height = FrameLayout.LayoutParams.MATCH_PARENT
+                }
             }
             mChildOfContent.requestLayout()
             usableHeightPrevious = usableHeightNow
