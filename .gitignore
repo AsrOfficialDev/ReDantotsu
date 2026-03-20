@@ -76,3 +76,4 @@ crowdin.yml
 #vscode
 .vscode
 google-services.json
+app/google-services.json
