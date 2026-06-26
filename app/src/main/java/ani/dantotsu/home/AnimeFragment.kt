@@ -109,7 +109,7 @@ class AnimeFragment : Fragment() {
                 sort = Anilist.sortBy[1]
             )
         }
-        val popularAdaptor = MediaAdaptor(1, model.aniMangaSearchResults.results, requireActivity(), showCountdown = true)
+        val popularAdaptor = MediaAdaptor(1, model.aniMangaSearchResults.results, requireActivity())
         val progressAdaptor = ProgressAdapter(searched = model.searched)
         val adapter = ConcatAdapter(animePageAdapter, popularAdaptor, progressAdaptor)
         binding.animePageRecyclerView.adapter = adapter
@@ -206,22 +206,22 @@ class AnimeFragment : Fragment() {
             if (i) {
                 model.getUpdated().observe(viewLifecycleOwner) {
                     if (it != null) {
-                        animePageAdapter.updateRecent(MediaAdaptor(0, it, requireActivity(), showCountdown = true), it)
+                        animePageAdapter.updateRecent(MediaAdaptor(0, it, requireActivity()), it)
                     }
                 }
                 model.getMovies().observe(viewLifecycleOwner) {
                     if (it != null) {
-                        animePageAdapter.updateMovies(MediaAdaptor(0, it, requireActivity(), showCountdown = true), it)
+                        animePageAdapter.updateMovies(MediaAdaptor(0, it, requireActivity()), it)
                     }
                 }
                 model.getTopRated().observe(viewLifecycleOwner) {
                     if (it != null) {
-                        animePageAdapter.updateTopRated(MediaAdaptor(0, it, requireActivity(), showCountdown = true), it)
+                        animePageAdapter.updateTopRated(MediaAdaptor(0, it, requireActivity()), it)
                     }
                 }
                 model.getMostFav().observe(viewLifecycleOwner) {
                     if (it != null) {
-                        animePageAdapter.updateMostFav(MediaAdaptor(0, it, requireActivity(), showCountdown = true), it)
+                        animePageAdapter.updateMostFav(MediaAdaptor(0, it, requireActivity()), it)
                     }
                 }
                 if (animePageAdapter.trendingViewPager != null) {
@@ -233,8 +233,7 @@ class AnimeFragment : Fragment() {
                                     if (PrefManager.getVal(PrefName.SmallView)) 3 else 2,
                                     it,
                                     requireActivity(),
-                                    viewPager = animePageAdapter.trendingViewPager,
-                                    showCountdown = true
+                                    viewPager = animePageAdapter.trendingViewPager
                                 )
                             )
                             animePageAdapter.updateAvatar()
