@@ -28,6 +28,8 @@ fun RowScope.LiquidBottomTab(
     val scale = LocalLiquidBottomTabScale.current
     Column(
         modifier
+            .weight(1f)
+            .fillMaxHeight()
             .clip(ContinuousCapsule)
             .clickable(
                 interactionSource = null,
@@ -35,8 +37,6 @@ fun RowScope.LiquidBottomTab(
                 role = Role.Tab,
                 onClick = onClick
             )
-            .fillMaxHeight()
-            .weight(1f)
             .graphicsLayer {
                 val scale = scale()
                 scaleX = scale

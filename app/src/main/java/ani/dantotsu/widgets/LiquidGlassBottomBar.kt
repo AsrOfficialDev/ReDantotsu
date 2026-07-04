@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -121,7 +122,6 @@ class LiquidGlassWrapper @JvmOverloads constructor(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .padding(bottom = 32.dp, start = 24.dp, end = 24.dp)
-                        .padding(12.dp)
                 ) {
                     tabs.forEachIndexed { index, tab ->
                         LiquidBottomTab(onClick = {
@@ -294,7 +294,6 @@ class LiquidGlassBottomBar @JvmOverloads constructor(
                 tabsCount = tabs.size.coerceAtLeast(1),
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .padding(12.dp)
             ) {
                 tabs.forEachIndexed { index, tab ->
                     LiquidBottomTab(onClick = {
@@ -322,15 +321,17 @@ class LiquidGlassBottomBar @JvmOverloads constructor(
         val activeColor = if (isDark) Color.White else Color.Black
         val inactiveColor = Color.Gray
         val shape = RoundedCornerShape(40.dp) // Pill shape
+        val maxBarWidth = (tabs.size.coerceAtLeast(1) * 84 + 8).dp
         
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 24.dp, vertical = 16.dp),
+                .height(64.dp),
             contentAlignment = Alignment.BottomCenter
         ) {
             Row(
                 modifier = Modifier
+                    .widthIn(max = maxBarWidth)
                     .fillMaxWidth()
                     .height(60.dp)
                     .shadow(8.dp, shape)

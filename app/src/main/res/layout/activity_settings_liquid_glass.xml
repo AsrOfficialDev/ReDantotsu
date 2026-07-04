@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".settings.SettingsLiquidGlassActivity"
+    tools:ignore="SpeakableTextPresentCheck">
+
+    <LinearLayout
+        android:id="@+id/liquidGlassSettingsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            app:cardBackgroundColor="@color/nav_bg_inv"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp">
+
+            <ImageButton
+                android:id="@+id/liquidGlassSettingsBack"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:background="@color/nav_bg_inv"
+                android:padding="16dp"
+                app:srcCompat="@drawable/ic_round_arrow_back_ios_new_24"
+                app:tint="?attr/colorOnBackground"
+                tools:ignore="ContentDescription" />
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="32dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_bold"
+                    android:text="@string/liquid_glass_settings"
+                    android:textSize="28sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:alpha="0.58"
+                    android:fontFamily="@font/poppins_family"
+                    android:text="@string/immersive_mode_info"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:layout_gravity="center"
+                android:layout_marginEnd="20dp"
+                android:padding="24dp"
+                app:srcCompat="@drawable/baseline_invert_colors_24"
+                app:tint="?attr/colorOnBackground"
+                tools:ignore="ContentDescription" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="64dp"
+            android:clipToPadding="false"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/poppins_bold"
+                android:paddingStart="32dp"
+                android:paddingEnd="32dp"
+                android:text="@string/presets"
+                android:textColor="?attr/colorSecondary"
+                tools:ignore="TextContrastCheck" />
+
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/liquidGlassPresetGroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="16dp"
+                app:selectionRequired="true"
+                app:singleSelection="true">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/liquidGlassPresetSoft"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="@string/liquid_glass_preset_soft"
+                    android:textAllCaps="false"
+                    app:cornerRadius="8dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/liquidGlassPresetBalanced"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="@string/liquid_glass_preset_balanced"
+                    android:textAllCaps="false"
+                    app:cornerRadius="8dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/liquidGlassPresetFrosted"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="@string/liquid_glass_preset_frosted"
+                    android:textAllCaps="false"
+                    app:cornerRadius="8dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/liquidGlassPresetUltra"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="@string/liquid_glass_preset_ultra"
+                    android:textAllCaps="false"
+                    app:cornerRadius="8dp" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/poppins_bold"
+                android:paddingStart="32dp"
+                android:paddingEnd="32dp"
+                android:text="@string/effects"
+                android:textColor="?attr/colorSecondary"
+                tools:ignore="TextContrastCheck" />
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/liquidGlassAutoPerformance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:drawableStart="@drawable/ic_round_high_quality_24"
+                android:drawablePadding="16dp"
+                android:elegantTextHeight="true"
+                android:fontFamily="@font/poppins_bold"
+                android:minHeight="64dp"
+                android:paddingStart="32dp"
+                android:paddingEnd="32dp"
+                android:text="@string/liquid_glass_auto_performance"
+                android:textAlignment="viewStart"
+                android:textColor="?attr/colorOnBackground"
+                app:cornerRadius="0dp"
+                app:drawableTint="?attr/colorPrimary"
+                app:showText="false"
+                app:thumbTint="@color/button_switch_track" />
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/liquidGlassAdaptiveContrast"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:drawableStart="@drawable/baseline_invert_colors_24"
+                android:drawablePadding="16dp"
+                android:elegantTextHeight="true"
+                android:fontFamily="@font/poppins_bold"
+                android:minHeight="64dp"
+                android:paddingStart="32dp"
+                android:paddingEnd="32dp"
+                android:text="@string/liquid_glass_adaptive_contrast"
+                android:textAlignment="viewStart"
+                android:textColor="?attr/colorOnBackground"
+                app:cornerRadius="0dp"
+                app:drawableTint="?attr/colorPrimary"
+                app:showText="false"
+                app:thumbTint="@color/button_switch_track" />
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/liquidGlassMotion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:drawableStart="@drawable/ic_round_animation_24"
+                android:drawablePadding="16dp"
+                android:elegantTextHeight="true"
+                android:fontFamily="@font/poppins_bold"
+                android:minHeight="64dp"
+                android:paddingStart="32dp"
+                android:paddingEnd="32dp"
+                android:text="@string/liquid_glass_motion"
+                android:textAlignment="viewStart"
+                android:textColor="?attr/colorOnBackground"
+                app:cornerRadius="0dp"
+                app:drawableTint="?attr/colorPrimary"
+                app:showText="false"
+                app:thumbTint="@color/button_switch_track" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:drawablePadding="16dp"
+                android:fontFamily="@font/poppins_bold"
+                android:paddingStart="32dp"
+                android:paddingEnd="32dp"
+                android:text="@string/liquid_glass_effect_strength"
+                app:drawableStartCompat="@drawable/blur_on"
+                app:drawableTint="?attr/colorPrimary" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/liquidGlassEffectStrength"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                android:stepSize="0.25"
+                android:value="1.0"
+                android:valueFrom="0.5"
+                android:valueTo="1.5"
+                app:labelBehavior="floating"
+                app:labelStyle="@style/fontTooltip"
+                app:thumbColor="?attr/colorSecondary"
+                app:tickColorInactive="?attr/colorSecondary"
+                app:trackColorActive="?attr/colorSecondary" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:drawablePadding="16dp"
+                android:fontFamily="@font/poppins_bold"
+                android:paddingStart="32dp"
+                android:paddingEnd="32dp"
+                android:text="@string/liquid_glass_surface_opacity"
+                app:drawableStartCompat="@drawable/baseline_invert_colors_24"
+                app:drawableTint="?attr/colorPrimary" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/liquidGlassSurfaceOpacity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                android:stepSize="0.1"
+                android:value="1.0"
+                android:valueFrom="0.6"
+                android:valueTo="1.4"
+                app:labelBehavior="floating"
+                app:labelStyle="@style/fontTooltip"
+                app:thumbColor="?attr/colorSecondary"
+                app:tickColorInactive="?attr/colorSecondary"
+                app:trackColorActive="?attr/colorSecondary" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:drawablePadding="16dp"
+                android:fontFamily="@font/poppins_bold"
+                android:paddingStart="32dp"
+                android:paddingEnd="32dp"
+                android:text="@string/liquid_glass_highlights"
+                app:drawableStartCompat="@drawable/ic_round_auto_awesome_24"
+                app:drawableTint="?attr/colorPrimary" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/liquidGlassHighlightStrength"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                android:stepSize="0.1"
+                android:value="1.0"
+                android:valueFrom="0.4"
+                android:valueTo="1.6"
+                app:labelBehavior="floating"
+                app:labelStyle="@style/fontTooltip"
+                app:thumbColor="?attr/colorSecondary"
+                app:tickColorInactive="?attr/colorSecondary"
+                app:trackColorActive="?attr/colorSecondary" />
+
+            <Button
+                android:id="@+id/liquidGlassReset"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/ui_bg"
+                android:fontFamily="@font/poppins_bold"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:paddingStart="32dp"
+                android:paddingEnd="32dp"
+                android:text="@string/reset_liquid_glass"
+                android:textAlignment="viewStart"
+                android:textAllCaps="false"
+                android:textColor="?attr/colorOnBackground"
+                app:cornerRadius="0dp"
+                app:icon="@drawable/ic_round_reset_star_24"
+                app:iconPadding="16dp"
+                app:iconSize="24dp"
+                app:iconTint="?attr/colorPrimary" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

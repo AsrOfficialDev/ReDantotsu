@@ -20,6 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
         android:background="@drawable/pill_background"
+        android:clipToOutline="true"
         android:elevation="8dp">
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -32,6 +33,7 @@
             app:labelVisibilityMode="unlabeled"
             app:itemIconTint="@color/tab_layout_icon"
             app:itemTextColor="@color/tab_layout_icon"
+            app:itemRippleColor="@android:color/transparent"
             app:itemActiveIndicatorStyle="@null" />
 
     </FrameLayout>

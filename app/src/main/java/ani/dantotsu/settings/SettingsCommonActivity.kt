@@ -161,6 +161,21 @@ class SettingsCommonActivity : AppCompatActivity() {
                         ),
                         Settings(
                             type = 1,
+                            name = getString(R.string.liquid_glass_settings),
+                            desc = getString(R.string.liquid_glass_settings_desc),
+                            icon = R.drawable.baseline_invert_colors_24,
+                            onClick = {
+                                startActivity(
+                                    Intent(
+                                        context,
+                                        SettingsLiquidGlassActivity::class.java,
+                                    ),
+                                )
+                            },
+                            isActivity = true,
+                        ),
+                        Settings(
+                            type = 1,
                             name = getString(R.string.download_manager_select),
                             desc = getString(R.string.download_manager_select_desc),
                             icon = R.drawable.ic_download_24,

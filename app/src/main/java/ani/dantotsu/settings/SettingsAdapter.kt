@@ -9,8 +9,10 @@ import ani.dantotsu.databinding.ItemSettingsBinding
 import ani.dantotsu.databinding.ItemSettingsSwitchBinding
 import ani.dantotsu.setAnimation
 
-class SettingsAdapter(private val settings: ArrayList<Settings>) :
+class SettingsAdapter(settings: ArrayList<Settings>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private val visibleSettings = settings.filter { it.isVisible }
+
     inner class SettingsViewHolder(val binding: ItemSettingsBinding) :
         RecyclerView.ViewHolder(binding.root)
 
@@ -40,7 +42,7 @@ class SettingsAdapter(private val settings: ArrayList<Settings>) :
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val settings = settings[position]
+        val settings = visibleSettings[position]
         when (settings.type) {
             1 -> {
                 val b = (holder as SettingsViewHolder).binding
@@ -60,7 +62,7 @@ class SettingsAdapter(private val settings: ArrayList<Settings>) :
                     settings.onLongClick?.invoke()
                     true
                 }
-                b.settingsLayout.visibility = if (settings.isVisible) View.VISIBLE else View.GONE
+                b.settingsLayout.visibility = View.VISIBLE
                 b.settingsIconRight.visibility =
                     if (settings.isActivity) View.VISIBLE else View.GONE
                 b.attachView.visibility = if (settings.attach != null) View.VISIBLE else View.GONE
@@ -86,15 +88,16 @@ class SettingsAdapter(private val settings: ArrayList<Settings>) :
                     settings.onLongClick?.invoke()
                     true
                 }
-                b.settingsLayout.visibility = if (settings.isVisible) View.VISIBLE else View.GONE
+                b.settingsLayout.visibility = View.VISIBLE
+                b.settingsExtraIcon.visibility = View.GONE
                 settings.attachToSwitch?.invoke(b)
             }
         }
     }
 
-    override fun getItemCount(): Int = settings.size
+    override fun getItemCount(): Int = visibleSettings.size
 
     override fun getItemViewType(position: Int): Int {
-        return settings[position].type
+        return visibleSettings[position].type
     }
 }

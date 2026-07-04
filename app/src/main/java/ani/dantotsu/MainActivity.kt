@@ -309,6 +309,8 @@ class MainActivity : AppCompatActivity() {
                         HorizontalPager(
                             state = pagerState,
                             userScrollEnabled = false,
+                            beyondViewportPageCount = 2,
+                            key = { page -> page },
                             modifier = Modifier
                                 .fillMaxSize()
                                 .layerBackdrop(backdrop) // Capture content for glass effect
@@ -333,21 +335,21 @@ class MainActivity : AppCompatActivity() {
                             onTabSelected = { index ->
                                 selectedIndex = index
                                 selectedOption = index
-                                coroutineScope.launch {
-                                    pagerState.scrollToPage(index)
+                                if (pagerState.currentPage != index) {
+                                    coroutineScope.launch {
+                                        pagerState.scrollToPage(index)
+                                    }
                                 }
                             },
                             backdrop = backdrop, // Use the captured content
                             tabsCount = 3,
+                            preferSmoothTransitions = true,
                             modifier = Modifier
                                 .align(Alignment.BottomCenter)
                                 .padding(bottom = 32.dp, start = 24.dp, end = 24.dp)
-                                .padding(12.dp) // Internal padding for animation clipping
                         ) {
                             LiquidBottomTab(onClick = {
                                 selectedIndex = 0
-                                selectedOption = 0
-                                coroutineScope.launch { pagerState.scrollToPage(0) }
                             }) {
                                 Icon(painterResource(R.drawable.ic_round_movie_filter_24), contentDescription = stringResource(R.string.anime))
                                 Text(stringResource(R.string.anime))
@@ -355,8 +357,6 @@ class MainActivity : AppCompatActivity() {
 
                             LiquidBottomTab(onClick = {
                                 selectedIndex = 1
-                                selectedOption = 1
-                                coroutineScope.launch { pagerState.scrollToPage(1) }
                             }) {
                                 Icon(painterResource(R.drawable.ic_round_home_24), contentDescription = stringResource(R.string.home))
                                 Text(stringResource(R.string.home))
@@ -364,8 +364,6 @@ class MainActivity : AppCompatActivity() {
 
                             LiquidBottomTab(onClick = {
                                 selectedIndex = 2
-                                selectedOption = 2
-                                coroutineScope.launch { pagerState.scrollToPage(2) }
                             }) {
                                 Icon(painterResource(R.drawable.ic_round_import_contacts_24), contentDescription = stringResource(R.string.manga))
                                 Text(stringResource(R.string.manga))

@@ -21,7 +21,8 @@ import kotlinx.coroutines.launch
 
 class InteractiveHighlight(
     val animationScope: CoroutineScope,
-    val position: (size: Size, offset: Offset) -> Offset = { _, offset -> offset }
+    val position: (size: Size, offset: Offset) -> Offset = { _, offset -> offset },
+    val intensity: () -> Float = { 1f }
 ) {
 
     private val pressProgressAnimationSpec =
@@ -61,20 +62,22 @@ half4 main(float2 coord) {
         Modifier.drawWithContent {
             val progress = pressProgressAnimation.value
             if (progress > 0f) {
+                val highlight = intensity().fastCoerceIn(0.4f, 1.6f)
+                val center = position(size, positionAnimation.value)
+                val boundedCenter = Offset(
+                    center.x.fastCoerceIn(0f, size.width),
+                    center.y.fastCoerceIn(0f, size.height)
+                )
+                val radius = size.minDimension * 0.65f
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && shader != null) {
-                    drawRect(
-                        Color.White.copy(0.08f * progress),
-                        blendMode = BlendMode.Plus
-                    )
                     shader.apply {
-                        val position = position(size, positionAnimation.value)
                         setFloatUniform("size", size.width, size.height)
-                        setColorUniform("color", Color.White.copy(0.15f * progress).toArgb())
-                        setFloatUniform("radius", size.minDimension * 1.5f)
+                        setColorUniform("color", Color.White.copy(0.15f * progress * highlight).toArgb())
+                        setFloatUniform("radius", radius)
                         setFloatUniform(
                             "position",
-                            position.x.fastCoerceIn(0f, size.width),
-                            position.y.fastCoerceIn(0f, size.height)
+                            boundedCenter.x,
+                            boundedCenter.y
                         )
                     }
                     drawRect(
@@ -82,8 +85,10 @@ half4 main(float2 coord) {
                         blendMode = BlendMode.Plus
                     )
                 } else {
-                    drawRect(
-                        Color.White.copy(0.25f * progress),
+                    drawCircle(
+                        Color.White.copy(0.25f * progress * highlight),
+                        radius = radius,
+                        center = boundedCenter,
                         blendMode = BlendMode.Plus
                     )
                 }

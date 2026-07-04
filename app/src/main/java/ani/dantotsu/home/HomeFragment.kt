@@ -222,6 +222,11 @@ class HomeFragment : Fragment() {
         }
 
         //Function For Recycler Views
+        fun isHomeLayoutEnabled(index: Int): Boolean {
+            val homeLayoutShow: List<Boolean> = PrefManager.getVal(PrefName.HomeLayout)
+            return homeLayoutShow.getOrNull(index) != false
+        }
+
         fun initRecyclerView(
             mode: LiveData<ArrayList<Media>>,
             container: View,
@@ -230,49 +235,69 @@ class HomeFragment : Fragment() {
             empty: View,
             title: View,
             more: View,
-            string: String
+            homeLayoutIndex: Int,
+            string: String,
+            hideUntilDataReady: Boolean = false
         ) {
-            container.visibility = View.VISIBLE
-            progress.visibility = View.VISIBLE
-            recyclerView.visibility = View.GONE
-            empty.visibility = View.GONE
-            title.visibility = View.INVISIBLE
-            more.visibility = View.INVISIBLE
-
-            mode.observe(viewLifecycleOwner) {
+            fun render(items: ArrayList<Media>?) {
                 recyclerView.visibility = View.GONE
                 empty.visibility = View.GONE
-                if (it != null) {
-                    if (it.isNotEmpty()) {
-                        recyclerView.adapter = MediaAdaptor(0, it, requireActivity(), showCountdown = true)
-                        recyclerView.layoutManager = LinearLayoutManager(
-                            requireContext(),
-                            LinearLayoutManager.HORIZONTAL,
-                            false
-                        )
-                        more.setOnClickListener { i ->
-                            MediaListViewActivity.passedMedia = it
-                            ContextCompat.startActivity(
-                                i.context, Intent(i.context, MediaListViewActivity::class.java)
-                                    .putExtra("title", string),
-                                null
-                            )
-                        }
-                        recyclerView.visibility = View.VISIBLE
-                        recyclerView.layoutAnimation =
-                            LayoutAnimationController(setSlideIn(), 0.25f)
 
-                    } else {
-                        empty.visibility = View.VISIBLE
-                    }
-                    more.visibility = View.VISIBLE
-                    title.visibility = View.VISIBLE
-                    more.startAnimation(setSlideUp())
-                    title.startAnimation(setSlideUp())
+                if (!isHomeLayoutEnabled(homeLayoutIndex)) {
+                    container.visibility = View.GONE
                     progress.visibility = View.GONE
+                    title.visibility = View.INVISIBLE
+                    more.visibility = View.INVISIBLE
+                    return
                 }
+
+                if (items == null) {
+                    if (hideUntilDataReady) {
+                        container.visibility = View.GONE
+                        progress.visibility = View.GONE
+                    } else {
+                        container.visibility = View.VISIBLE
+                        progress.visibility = View.VISIBLE
+                    }
+                    title.visibility = View.INVISIBLE
+                    more.visibility = View.INVISIBLE
+                    return
+                }
+
+                container.visibility = View.VISIBLE
+                if (items.isNotEmpty()) {
+                    recyclerView.adapter = MediaAdaptor(0, items, requireActivity(), showCountdown = true)
+                    recyclerView.layoutManager = LinearLayoutManager(
+                        requireContext(),
+                        LinearLayoutManager.HORIZONTAL,
+                        false
+                    )
+                    more.setOnClickListener { i ->
+                        MediaListViewActivity.passedMedia = items
+                        ContextCompat.startActivity(
+                            i.context, Intent(i.context, MediaListViewActivity::class.java)
+                                .putExtra("title", string),
+                            null
+                        )
+                    }
+                    recyclerView.visibility = View.VISIBLE
+                    recyclerView.layoutAnimation =
+                        LayoutAnimationController(setSlideIn(), 0.25f)
+
+                } else {
+                    empty.visibility = View.VISIBLE
+                }
+                more.visibility = View.VISIBLE
+                title.visibility = View.VISIBLE
+                more.startAnimation(setSlideUp())
+                title.startAnimation(setSlideUp())
+                progress.visibility = View.GONE
             }
 
+            render(mode.value)
+            mode.observe(viewLifecycleOwner) {
+                render(it)
+            }
         }
 
         // Recycler Views
@@ -284,7 +309,9 @@ class HomeFragment : Fragment() {
             binding.homeWatchingEmpty,
             binding.homeContinueWatch,
             binding.homeContinueWatchMore,
-            getString(R.string.continue_watching)
+            0,
+            getString(R.string.continue_watching),
+            hideUntilDataReady = true
         )
         binding.homeWatchingBrowseButton.setOnClickListener {
             bottomBar?.selectTabAt(0)
@@ -298,6 +325,7 @@ class HomeFragment : Fragment() {
             binding.homeFavAnimeEmpty,
             binding.homeFavAnime,
             binding.homeFavAnimeMore,
+            1,
             getString(R.string.fav_anime)
         )
 
@@ -309,6 +337,7 @@ class HomeFragment : Fragment() {
             binding.homePlannedAnimeEmpty,
             binding.homePlannedAnime,
             binding.homePlannedAnimeMore,
+            2,
             getString(R.string.planned_anime)
         )
         binding.homePlannedAnimeBrowseButton.setOnClickListener {
@@ -323,7 +352,9 @@ class HomeFragment : Fragment() {
             binding.homeReadingEmpty,
             binding.homeContinueRead,
             binding.homeContinueReadMore,
-            getString(R.string.continue_reading)
+            3,
+            getString(R.string.continue_reading),
+            hideUntilDataReady = true
         )
         binding.homeReadingBrowseButton.setOnClickListener {
             bottomBar?.selectTabAt(2)
@@ -337,6 +368,7 @@ class HomeFragment : Fragment() {
             binding.homeFavMangaEmpty,
             binding.homeFavManga,
             binding.homeFavMangaMore,
+            4,
             getString(R.string.fav_manga)
         )
 
@@ -348,6 +380,7 @@ class HomeFragment : Fragment() {
             binding.homePlannedMangaEmpty,
             binding.homePlannedManga,
             binding.homePlannedMangaMore,
+            5,
             getString(R.string.planned_manga)
         )
         binding.homePlannedMangaBrowseButton.setOnClickListener {
@@ -362,6 +395,7 @@ class HomeFragment : Fragment() {
             binding.homeRecommendedEmpty,
             binding.homeRecommended,
             binding.homeRecommendedMore,
+            6,
             getString(R.string.recommended)
         )
         binding.homeUserStatusContainer.visibility = View.VISIBLE

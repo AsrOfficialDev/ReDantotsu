@@ -44,7 +44,6 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import com.kyant.backdrop.backdrops.rememberLayerBackdrop
 
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.rememberCoroutineScope
 import kotlinx.coroutines.launch
 import androidx.compose.ui.Modifier
@@ -109,12 +108,11 @@ class NoInternet : AppCompatActivity() {
                 )
                 val coroutineScope = rememberCoroutineScope()
                 val backdrop = rememberLayerBackdrop()
+                var selectedIndex by remember { mutableIntStateOf(selectedOption) }
 
-                // Sync pager to selectedOption changes ONLY
-                LaunchedEffect(selectedOption) {
-                    if (pagerState.currentPage != selectedOption) {
-                        pagerState.scrollToPage(selectedOption)
-                    }
+                LaunchedEffect(pagerState.currentPage) {
+                    selectedIndex = pagerState.currentPage
+                    selectedOption = pagerState.currentPage
                 }
                 
                 Box(modifier = Modifier.fillMaxSize()) {
@@ -122,6 +120,8 @@ class NoInternet : AppCompatActivity() {
                     HorizontalPager(
                         state = pagerState,
                         userScrollEnabled = false,
+                        beyondViewportPageCount = 2,
+                        key = { page -> page },
                         modifier = Modifier
                             .fillMaxSize()
                             .layerBackdrop(backdrop)
@@ -134,37 +134,37 @@ class NoInternet : AppCompatActivity() {
                     }
                     
                     LiquidBottomTabs(
-                        selectedTabIndex = { selectedOption },
+                        selectedTabIndex = { selectedIndex },
                         onTabSelected = { index ->
+                            selectedIndex = index
                             selectedOption = index
-                            coroutineScope.launch { pagerState.scrollToPage(index) }
+                            if (pagerState.currentPage != index) {
+                                coroutineScope.launch { pagerState.scrollToPage(index) }
+                            }
                         },
                         backdrop = backdrop,
                         tabsCount = 3,
+                        preferSmoothTransitions = true,
                         modifier = Modifier
                             .align(Alignment.BottomCenter)
                             .padding(bottom = 32.dp, start = 24.dp, end = 24.dp)
-                            .padding(12.dp)
                     ) {
                         LiquidBottomTab(onClick = {
-                            selectedOption = 0
-                            coroutineScope.launch { pagerState.scrollToPage(0) }
+                            selectedIndex = 0
                         }) {
                             Icon(painterResource(R.drawable.ic_round_movie_filter_24), contentDescription = stringResource(R.string.anime))
                             Text(stringResource(R.string.anime))
                         }
 
                         LiquidBottomTab(onClick = {
-                            selectedOption = 1
-                            coroutineScope.launch { pagerState.scrollToPage(1) }
+                            selectedIndex = 1
                         }) {
                             Icon(painterResource(R.drawable.ic_round_home_24), contentDescription = stringResource(R.string.home))
                             Text(stringResource(R.string.home))
                         }
 
                         LiquidBottomTab(onClick = {
-                            selectedOption = 2
-                            coroutineScope.launch { pagerState.scrollToPage(2) }
+                            selectedIndex = 2
                         }) {
                             Icon(painterResource(R.drawable.ic_round_import_contacts_24), contentDescription = stringResource(R.string.manga))
                             Text(stringResource(R.string.manga))
