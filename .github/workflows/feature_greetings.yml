@@ -65,7 +65,7 @@ jobs:
           const issueNumber = context.payload.issue.number;
           const message = `
           **💡 Thank you for your feature request!**
-            Your request has been successfully submitted and is now under consideration. We value your input in shaping the future of Dantotsu.
+            Your request has been successfully submitted and is now under consideration. We value your input in shaping the future of ReDantotsu.
 
           **📈 What to Expect Next**
           - Our team will review your request and assess its feasibility.
@@ -73,8 +73,8 @@ jobs:
           - Updates on the request will be provided, and it may be scheduled for future development.
 
           **👥 Stay Connected**
-          - **[Discord](https://discord.com/invite/4HPZ5nAWwM)**: Join our community to discuss ideas and stay updated.
-          - **[Telegram](https://t.me/dantotsuapp)**: Connect with us directly for real-time updates.
+          - **[Discord](https://discord.gg/fYEJmDsDz9)**: Join our community to discuss ideas and stay updated.
+          - **[Telegram](https://t.me/redantotsu)**: Connect with us directly for real-time updates.
 
           We appreciate your suggestion and look forward to potentially implementing it!
           `;
