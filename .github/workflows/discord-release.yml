@@ -1,0 +1,18 @@
+name: Post Release to Discord
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  announce:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send release to Discord
+        uses: SethCohen/github-releases-to-discord@v1
+        with:
+          webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
+          color: "2105893"
+          username: "ReDantotsu Patch Notes"
+          footer_title: "Changelog"
+          reduce_headings: true

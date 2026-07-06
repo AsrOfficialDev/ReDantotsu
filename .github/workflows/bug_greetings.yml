@@ -66,14 +66,14 @@ jobs:
           const issueNumber = context.payload.issue.number;
           const message = `
           **🛠️ Thank you for reporting a bug!**  
-          Your issue has been successfully submitted and is now awaiting review. We appreciate your help in making Dantotsu better.
+          Your issue has been successfully submitted and is now awaiting review. We appreciate your help in making ReDantotsu better.
           **🔍 What Happens Next**  
           - Our team will investigate the issue and provide updates as soon as possible.  
           - You may be asked for additional details or clarification if needed.  
           - Once resolved, we'll notify you of the fix or provide a workaround.
           **👥 Connect with Us**  
-          - **[Discord](https://discord.com/invite/4HPZ5nAWwM)**: Engage with our community and ask questions.  
-          - **[Telegram](https://t.me/dantotsuapp)**: Reach out for real-time discussions and updates.
+          - **[Discord](https://discord.gg/fYEJmDsDz9)**: Engage with our community and ask questions.  
+          - **[Telegram](https://t.me/redantotsu)**: Reach out for real-time discussions and updates.
           We're working hard to resolve the issue and appreciate your patience!
           `;
           await github.rest.issues.createComment({
