@@ -1,5 +1,7 @@
 # ReDantotsu
 
+**[Discontinued]**
+
 <p align="center">
   <a href="https://github.com/AsrOfficialDev/ReDantotsu/releases/latest">
     <img src="https://img.shields.io/github/v/release/AsrOfficialDev/ReDantotsu?style=for-the-badge&logo=github&color=00bfff&label=Current%20Release" alt="Current Release">
